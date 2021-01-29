@@ -1,8 +1,9 @@
-import React, { Component, useState } from "react";
+import React, {  useState } from "react";
 import { ListGroup } from "react-bootstrap";
 
 function List(props) {
-  const [key, setKey] = useState(0);
+    // eslint-disable-next-line
+    const [_, setKey] = useState(0);
   return (
     <div>
       <ListGroup defaultActiveKey={0} onSelect={(k) => setKey(k)}>

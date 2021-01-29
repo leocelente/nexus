@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 
-import { Nav, Navbar, Tab, Tabs, ProgressBar } from "react-bootstrap";
+import { Nav, Navbar, Tab, Tabs } from "react-bootstrap";
 import PaginaInicial from "./pages/PaginaInicial";
 import Praticas from "./pages/Praticas";
 import Indicadores from "./pages/Indicadores";

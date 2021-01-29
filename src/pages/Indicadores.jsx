@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Form } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import List from "../components/List";
 import PageBase from "../components/PageBase";
 import Select from "../components/Select";

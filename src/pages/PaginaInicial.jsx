@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Modal, Card, Col, Container, Row, Image } from "react-bootstrap";
+import { Button, Modal, Col, Container, Row, Image } from "react-bootstrap";
 
 export default class PaginaInicial extends Component {
   constructor(props) {
@@ -20,18 +20,17 @@ export default class PaginaInicial extends Component {
     const handleClose = () => this.setShow(false, "");
     const handleShow = (content) => this.setShow(true, content);
     const tt =
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos\
-       deserunt nisi itaque, sint et commodi iure earum corporis a laudantium\
-        cum quod facilis ratione? Aliquam, tempora! Facilis sequi doloremque \
-        esse.";
-    const img = <Image src="https://via.placeholder.com/465x320"/>;
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo natus fugiat eveniet laborum ratione. Tenetur quae distinctio quo odit excepturi ipsa, ut minima omnis harum praesentium dolorem aut necessitatibus! Nihil.";
+    const img = <Image src="https://via.placeholder.com/465x320" />;
     return (
       <div>
         <Modal show={this.state.show} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Modal heading</Modal.Title>
           </Modal.Header>
-          <Modal.Body style={{color:'black'}}>{this.state.content}</Modal.Body>
+          <Modal.Body style={{ color: "black" }}>
+            {this.state.content}
+          </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Close

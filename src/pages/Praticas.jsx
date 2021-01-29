@@ -4,8 +4,7 @@ import List from "../components/List";
 import Mapa from "../images/mapa-região.jpeg";
 
 import PageBase from "../components/PageBase";
-import SimpleRadar from "../components/SimpleRadar";
-import { Card, Form, Image } from "react-bootstrap";
+import { Card, Image } from "react-bootstrap";
 import Select from "../components/Select";
 
 export default class Praticas extends Component {
@@ -36,7 +35,7 @@ export default class Praticas extends Component {
               
               <br></br>
 
-              <List items={praticas} title="Praticas" title="Praticas" />
+              <List items={praticas} title="Praticas" />
             </div>
           }
         />
