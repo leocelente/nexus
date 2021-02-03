@@ -10,9 +10,9 @@ export default function Select(props) {
         </Card.Title>
         <Form>
           <Form.Group controlId="exampleForm.ControlSelect1">
-            <Form.Control as="select">
+            <Form.Control as="select" onChange={(e)=>props.onSelect(e.target.selectedIndex)} value={props.value} custom >
               {props.items.map((item, idx) => (
-                <option action eventKey={idx} key={idx}>
+                <option action eventKey={idx} key={idx} value={idx}>
                   {item}
                 </option>
               ))}

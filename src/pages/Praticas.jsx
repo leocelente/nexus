@@ -7,11 +7,13 @@ import PageBase from "../components/PageBase";
 import { Card, Image } from "react-bootstrap";
 import Select from "../components/Select";
 
+
+import { selectTema } from "../redux/actions/praticasActions";
+import SelectTema from "../components/SelectTema";
+import PraticasList from "../components/PraticasList";
+
 export default class Praticas extends Component {
   render() {
-    var praticas = ["Pratica 1", "Pratica 2", "Pratica 1", "Pratica 3"];
-    const temas = ["Tema_1","Tema_2","Tema_3","Tema_4"];
-
     return (
       <div>
         <PageBase
@@ -23,19 +25,16 @@ export default class Praticas extends Component {
                   <h4>Segundo Passo</h4>
                 </Card.Title>
                 <Card.Text style={{ color: "black" }}>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Praesentium ab fugiat odit maxime laboriosam. Quod repudiandae
-                  dicta vero vel dolorum ad, sint dolores, odio nisi nemo
-                  doloremque, reiciendis quas iusto!
+                Conheça diferentes práticas rurais ligadas à manutenção da segurança - tanto hídrica e energética quanto alimentar 
                 </Card.Text>
               </Card>
               <br></br>
 
-              <Select title="Tema" items={temas}/>
-              
+              {/* <Select title="Tema" items={temas}/> */}
+              <SelectTema />
               <br></br>
 
-              <List items={praticas} title="Praticas" />
+              <PraticasList />
             </div>
           }
         />

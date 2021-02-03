@@ -3,6 +3,7 @@ import { Card } from "react-bootstrap";
 import List from "../components/List";
 import PageBase from "../components/PageBase";
 import Select from "../components/Select";
+import SelectTema from "../components/SelectTema";
 import SimpleBar from "../components/SimpleBar";
 
 export default class Indicadores extends Component {
@@ -26,14 +27,11 @@ export default class Indicadores extends Component {
                   <h4>Primeiro Passo</h4>
                 </Card.Title>
                 <Card.Text style={{ color: "black" }}>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Error maxime tenetur ea, doloremque dolores quae quisquam
-                  minima! Quasi laboriosam cumque delectus ab rem, quisquam,
-                  fuga ipsa excepturi, vero eaque sint.
+                Acesse indicadores NEXUS para fazer comparações entre diferentes propriedades
                 </Card.Text>
               </Card>
               <br></br>
-              <Select title="Tema" items={temas}/>
+              <SelectTema />
               
               <br></br>
             

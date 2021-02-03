@@ -1,42 +1,44 @@
 import React, { Component } from "react";
 import { Button, Modal, Col, Container, Row, Image } from "react-bootstrap";
-
+import TableJson from "../components/TableJson";
+import equipe from "../images/equipe_cropped.jpg";
+import propriedades from "../api/mock/propriedades";
+import PropriedadesTables from "../components/PropriedadesTables";
+import textos from '../api/mock/inicial';
 export default class PaginaInicial extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show: false,
       content: {},
+      title: "",
     };
   }
-  setShow(b, c) {
+  setShow(show, content, title) {
     this.setState({
-      show: b,
-      content: c,
+      show,
+      content,
+      title,
     });
   }
 
   render() {
-    const handleClose = () => this.setShow(false, "");
-    const handleShow = (content) => this.setShow(true, content);
-    const tt =
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo natus fugiat eveniet laborum ratione. Tenetur quae distinctio quo odit excepturi ipsa, ut minima omnis harum praesentium dolorem aut necessitatibus! Nihil.";
-    const img = <Image src="https://via.placeholder.com/465x320" />;
+    const handleClose = () => this.setShow(false, "", "");
+    const handleShow = (title, content) => this.setShow(true, content, title);
+    const img = <Image src={equipe} />;
+    const pp = <PropriedadesTables />;
     return (
       <div>
-        <Modal show={this.state.show} onHide={handleClose}>
+        <Modal size="lg" show={this.state.show} onHide={handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>{this.state.title}</Modal.Title>
           </Modal.Header>
           <Modal.Body style={{ color: "black" }}>
             {this.state.content}
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
             <Button variant="primary" onClick={handleClose}>
-              Save Changes
+              Close
             </Button>
           </Modal.Footer>
         </Modal>
@@ -47,18 +49,30 @@ export default class PaginaInicial extends Component {
         </h3>
         <Container>
           <Row>
-            <Col className="pi-card" onClick={() => handleShow(tt)}>
+            <Col
+              className="pi-card"
+              onClick={() => handleShow("O Projeto", textos["O Projeto"])}
+            >
               <span>O Projeto</span>
             </Col>
-            <Col className="pi-card" onClick={() => handleShow(tt)}>
+            <Col
+              className="pi-card"
+              onClick={() => handleShow("A Plataforma", textos["A Plataforma"])}
+            >
               <span>A Plataforma</span>
             </Col>
           </Row>
           <Row>
-            <Col className="pi-card" onClick={() => handleShow(img)}>
+            <Col
+              className="pi-card"
+              onClick={() => handleShow("A Equipe", img)}
+            >
               <span>A Equipe</span>
             </Col>
-            <Col className="pi-card" onClick={() => handleShow(tt)}>
+            <Col
+              className="pi-card"
+              onClick={() => handleShow("Propriedades", pp)}
+            >
               <span>Propriedades</span>
             </Col>
           </Row>
