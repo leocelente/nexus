@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import { Button, Modal, Col, Container, Row, Image } from "react-bootstrap";
-import TableJson from "../components/TableJson";
 import equipe from "../images/equipe_cropped.jpg";
-import propriedades from "../api/mock/propriedades";
 import PropriedadesTables from "../components/PropriedadesTables";
-import textos from '../api/mock/inicial';
+import textos from "../api/mock/inicial";
 export default class PaginaInicial extends Component {
   constructor(props) {
     super(props);
@@ -14,6 +12,7 @@ export default class PaginaInicial extends Component {
       title: "",
     };
   }
+
   setShow(show, content, title) {
     this.setState({
       show,

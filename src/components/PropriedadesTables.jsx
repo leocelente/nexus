@@ -1,6 +1,5 @@
 import React, { Component, useState } from "react";
 import { Button, ListGroup, Collapse } from "react-bootstrap";
-import List from "./List";
 import TableJson from "./TableJson";
 import propriedades from "../api/mock/propriedades";
 

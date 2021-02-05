@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
+import GrupoAtributo from "../components/GrupoAtributo";
+import IndicadoresList from "../components/IndicadoresList";
 import List from "../components/List";
 import PageBase from "../components/PageBase";
 import Select from "../components/Select";
@@ -14,7 +16,6 @@ export default class Indicadores extends Component {
       "Indicador 1",
       "Indicador 3",
     ];
-    const temas = ["Tema_1","Tema_2","Tema_3","Tema_4"];
 
     return (
       <div>
@@ -31,12 +32,12 @@ export default class Indicadores extends Component {
                 </Card.Text>
               </Card>
               <br></br>
-              <SelectTema />
+              <GrupoAtributo />
               
               <br></br>
             
-              {/* <List items={indicadores} title="Tema" /> */}
-              <List items={indicadores} title="Indicadores" />
+              {/* <List items={indicadores} title="Indicadores" /> */}
+              <IndicadoresList />
             </div>
           }
         />
