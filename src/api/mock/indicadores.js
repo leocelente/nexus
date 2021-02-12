@@ -46,7 +46,6 @@ export default {
         "indicadores": [
             "Fontes alternativas de energia",
             "Energia gerada (KWh/ano)",
-            "Comprometimento hídrico (%)",
             "Energia consumida (KWh/ano)"
         ],
     }, ],

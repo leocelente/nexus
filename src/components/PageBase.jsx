@@ -5,7 +5,7 @@ export class PageBase extends Component {
   render() {
     return (
       <div>
-        <Container fluid={true} style={{backgroundColor: "#f1f1f0"}}>
+        <Container fluid="true" style={{ backgroundColor: "#f1f1f0" }}>
           <Row className="justify-content-md-center" xs={1} xl={2}>
             <Col>
               <Card>{this.props.left}</Card>

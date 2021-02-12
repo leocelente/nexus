@@ -47,28 +47,32 @@ export default class PaginaInicial extends Component {
           gricolas <u>S</u>ustentaveis
         </h3>
         <Container>
-          <Row>
+          <Row fluid="true" className="justify-content-md-center">
             <Col
+              lg={5}
               className="pi-card"
               onClick={() => handleShow("O Projeto", textos["O Projeto"])}
             >
               <span>O Projeto</span>
             </Col>
             <Col
+              lg={5}
               className="pi-card"
               onClick={() => handleShow("A Plataforma", textos["A Plataforma"])}
             >
               <span>A Plataforma</span>
             </Col>
           </Row>
-          <Row>
+          <Row fluid="true" className="justify-content-md-center">
             <Col
+              lg={5}
               className="pi-card"
               onClick={() => handleShow("A Equipe", img)}
             >
               <span>A Equipe</span>
             </Col>
             <Col
+              lg={5}
               className="pi-card"
               onClick={() => handleShow("Propriedades", pp)}
             >

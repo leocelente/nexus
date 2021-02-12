@@ -26,11 +26,11 @@ footer {
     padding: 0 2rem;
     width: 100%;
     height: 6rem;
-    line-height: 2.5rem;
+    /* line-height: 2.5rem; */
     background-color: lightgray;
-    display: flex;
+    /* display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-between; */
 }
 
 .logos {
@@ -42,7 +42,7 @@ footer img {
     height: 5rem;
 }
 
-footer span {
+.copyright {
     margin: auto 0.5rem;
     font-size: larger;
 }
