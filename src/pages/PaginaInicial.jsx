@@ -42,10 +42,6 @@ export default class PaginaInicial extends Component {
           </Modal.Footer>
         </Modal>
 
-        <h3>
-          <u>Pla</u>taforma <u>Co</u>operativa de <u>P</u>raticas <u>A</u>
-          gricolas <u>S</u>ustentaveis
-        </h3>
         <Container>
           <Row fluid="true" className="justify-content-md-center">
             <Col
