@@ -8,7 +8,7 @@ function List(props) {
 
   return (
     <div>
-      <ListGroup defaultActiveKey={0} onSelect={(k) => setKey(k)}>
+      <ListGroup defaultActiveKey={0} onSelect={(k) => {setKey(k); if(props.onSelect) props.onSelect(k)}}>
         <ListGroup.Item>
           <h4>{props.title}</h4>
         </ListGroup.Item>

@@ -1,54 +1,59 @@
 import React, { Component } from "react";
 import { Col, Row } from "react-bootstrap";
 import Select from "./Select";
-import SelectTema from "./SelectTema";
-import indicadores from "../api/mock/indicadores";
 import { connect } from "react-redux";
 import {
-  selectGrupo,
-  selectAtributo,
+    selectGrupo,
+    selectAtributo,
+    fetchIndicadores,
 } from "../redux/actions/indicadoresActions";
 
 class GrupoAtributo extends Component {
-  handleGrupo = (i) => {
-    this.props.selectGrupo(i);
-    this.props.selectAtributo(0);
-  };
+    
+    componentDidMount(){
+        this.props.fetchIndicadores();
+    }
 
-  handleAtributo = (i) => {
-    this.props.selectAtributo(i);
-  };
+    handleGrupo = (i) => {
+        this.props.selectGrupo(i);
+        this.props.selectAtributo(0);
+    };
 
-  render() {
-    const grupos = Object.entries(indicadores).map((x) => x[0]);
-    const grupo = grupos[this.props.grupo];
-    const atributos = indicadores[grupo].map((a) => a.atributo);
-    return (
-      <Row>
-        <Col>
-          <Select
-            title="Grupo"
-            items={grupos}
-            onSelect={this.handleGrupo}
-            value={this.props.grupo}
-          />
-        </Col>
-        <Col>
-          <Select
-            title="Atributos"
-            items={atributos}
-            onSelect={this.handleAtributo}
-            value={this.props.atributo}
-          />
-        </Col>
-      </Row>
-    );
-  }
+    handleAtributo = (i) => {
+        this.props.selectAtributo(i);
+    };
+
+    render() {
+        return (
+            <Row>
+                <Col>
+                    <Select
+                        title="Grupo"
+                        items={this.props.data.grupos.map(x=>x.nome)}
+                        onSelect={this.handleGrupo}
+                        value={this.props.grupo}
+                    />
+                </Col>
+                <Col>
+                    <Select
+                        title="Atributos"
+                        items={this.props.data.grupos[this.props.grupo].atributos.map(x=>x.nome)}
+                        onSelect={this.handleAtributo}
+                        value={this.props.atributo}
+                    />
+                </Col>
+            </Row>
+        );
+    }
 }
 const mapStateToProps = (state) => ({
-  grupo: state.indicadores.grupo,
-  atributo: state.indicadores.atributo,
+    data: state.indicadores.data,
+    grupo: state.indicadores.grupo,
+    atributo: state.indicadores.atributo,
 });
-export default connect(mapStateToProps, { selectGrupo, selectAtributo })(
-  GrupoAtributo
-);
+
+export default connect(mapStateToProps, {
+    selectGrupo,
+    selectAtributo,
+    fetchIndicadores,
+})(GrupoAtributo);

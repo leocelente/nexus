@@ -1,4 +1,6 @@
-import { SELECT_GRUPO, SELECT_ATRIBUTO } from "./index.js";
+import { fetchIndicadoresFirebase, fetchSerieHistoricaFirebase } from "../../api/firebase/index.js";
+
+import { SELECT_GRUPO, SELECT_ATRIBUTO, SELECT_INDICADOR } from "./index.js";
 
 export const selectGrupo = id => ({
     type: SELECT_GRUPO,
@@ -9,3 +11,18 @@ export const selectAtributo = id => ({
     type: SELECT_ATRIBUTO,
     payload: { id }
 });
+
+
+export const selectIndicador = i => ({
+    type: SELECT_INDICADOR,
+    payload: { indicador: i }
+});
+
+
+export const fetchIndicadores = () => async dispatch => {
+    fetchIndicadoresFirebase(dispatch);
+};
+
+export const fetchSerieHist = () => async dispatch => {
+    fetchSerieHistoricaFirebase(dispatch);
+}

@@ -1,12 +1,10 @@
-import { ADD_TODO, SELECT_TEMA } from "../actions";
+import { ADD_TODO, SELECT_TEMA, FETCH_PRATICAS, SELECT_PRATICA } from "../actions";
 
 const initialState = {
-    allIds: [],
-    byIds: {},
-    //
-    selectedIndicadores: [], // tracks tuple <tema, indicador>
-    selectedTema: 0, // tracks tema between pages
-    selectedPraticas: [], // tracks tuple <tema, pratica>
+    selectedIndicadores: [],
+    selectedTema: 0,
+    pratica: { propriedades: [{ gps: { latitude: -22.53, longitude: -43.12 } }] },
+    data: { temas: [{ praticas: [{ propriedades: [], benchmark: { agua: 0, alimento: 0, energia: 0 } }] }] }
 };
 
 export default function(state = initialState, action) {
@@ -23,6 +21,19 @@ export default function(state = initialState, action) {
                     selectedTema: id,
                 };
             }
+        case SELECT_PRATICA:
+            {
+                const { pratica } = action.payload;
+                return {
+                    ...state,
+                    pratica,
+                };
+            }
+        case FETCH_PRATICAS:
+            {
+                return {...state, data: action.payload };
+            }
+
         default:
             return state;
     }

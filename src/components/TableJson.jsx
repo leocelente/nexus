@@ -3,7 +3,6 @@ import { Table } from "react-bootstrap";
 
 export default class TableJson extends Component {
   render() {
-    const data = { key: "value", k2: "v1" };
     return (
       <div>
         <Table size="sm">

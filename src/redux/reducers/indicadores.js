@@ -1,8 +1,11 @@
-import { SELECT_ATRIBUTO, SELECT_GRUPO } from "../actions";
+import { SELECT_ATRIBUTO, SELECT_GRUPO, FETCH_INDICADORES, SELECT_INDICADOR, FETCH_SERIE_HIST } from "../actions";
 
 const initialState = {
     grupo: 0,
     atributo: 0,
+    data: { grupos: [{ name: "", atributos: [{ indicadores: [{ nome: "" }] }] }] },
+    serie: { dados: [{ data: [{ propriedade: {}, valor: 0 }], indicador: { nome: "" } }] },
+    selectedIndicador: { indicador: { nome: "" } }
 };
 
 export default function(state = initialState, action) {
@@ -23,6 +26,19 @@ export default function(state = initialState, action) {
                     atributo: id,
                 };
             }
+        case FETCH_INDICADORES:
+            {
+                return {...state, data: action.payload };
+            }
+        case FETCH_SERIE_HIST:
+            {
+                return {...state, serie: action.payload };
+            }
+        case SELECT_INDICADOR:
+            {
+                return {...state, selectedIndicador: action.payload };
+            }
+
         default:
             return state;
     }
