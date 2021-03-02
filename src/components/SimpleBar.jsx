@@ -54,6 +54,18 @@ class SimpleBar extends Component {
     }
 
     render() {
+        console.log(this.props.selectedIndicador);
+        if (this.props.selectedIndicador?.indicador?.nome === "") {
+            return (
+                <>
+                    <h2>Selecione um Indicador</h2>
+                    <span style={{color: 'black'}}>
+                        Clique em um dos indicadores na lista para ver o
+                        historico do indicador nas propriedades
+                    </span>
+                </>
+            );
+        }
         let data = base;
         let graficos = {};
         //TODO: Use forEach
@@ -75,7 +87,6 @@ class SimpleBar extends Component {
             // TODO: Use Array.find()
             if (indicador == this.props.selectedIndicador.indicador.nome) {
                 let indicador_data = graficos[indicador];
-
                 let datasets = [];
                 let labels = [];
                 indicador_data.series.forEach((ponto) => {
@@ -100,11 +111,7 @@ class SimpleBar extends Component {
             }
         }
 
-        return (
-            <div>
-                <Bar className="left-column" data={data} options={options} />
-            </div>
-        );
+        return <Bar className="left-column" data={data} options={options} />;
     }
 }
 
