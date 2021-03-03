@@ -2,30 +2,14 @@ import React, { Component } from "react";
 import GoogleMapReact from "google-map-react";
 import { connect } from "react-redux";
 import "../css/marker.css";
-const AnyReactComponent = ({ text }) => (
-    <div
-        style={{
-            backgroundColor: "white",
-            height: "1.3rem",
-            width: "auto",
-            color: "black",
-            borderRadius: "0.5rem",
-            textAlign: "center",
-            textDecoration: "underline",
-        }}
-    >
-        {text}
+import { Row } from "react-bootstrap";
+
+const Marker = ({ count, nome }) => (
+    <div className="pin">
+        {count}
+        <span className="tooltiptext">{nome}</span>
     </div>
 );
-const Marker = (props) => {
-    return (
-        <>
-            <div className="pin"></div>
-            <div className="pulse"></div>
-        </>
-    );
-};
-
 class SimpleMap extends Component {
     static defaultProps = {
         center: {
@@ -36,31 +20,43 @@ class SimpleMap extends Component {
     };
 
     render() {
-        // console.log(this.props.pratica);
-        const pos = this.props.pratica.propriedades.map((propriedade) => {
-            return (
-                <Marker
-                    lat={propriedade.gps.latitude}
-                    lng={propriedade.gps.longitude}
-                />
-            );
-        });
+        const pos = this.props.pratica.propriedades.map((p) => (
+            <Marker
+                lat={p.gps.latitude}
+                lng={p.gps.longitude}
+                nome={p.nome}
+                count={this.props.pratica.propriedades.indexOf(p) + 1}
+            />
+        ));
         return (
-            <div style={{ height: "40rem", width: "100%" }}>
-                <GoogleMapReact
-                    bootstrapURLKeys={{ key: process.env.REACT_APP_API }}
-                    defaultCenter={this.props.center}
-                    defaultZoom={this.props.zoom}
-                >
-                    {pos}
-                </GoogleMapReact>
-            </div>
+            <>
+                <div style={{ height: "70vh", width: "100%" }}>
+                    <GoogleMapReact
+                        bootstrapURLKeys={{ key: process.env.REACT_APP_API }}
+                        defaultCenter={this.props.center}
+                        defaultZoom={this.props.zoom}
+                    >
+                        {pos}
+                    </GoogleMapReact>
+                </div>
+                <hr />
+                <h3>Legenda:</h3>
+                <div style={{ color: "black", paddingLeft: "2rem" }}>
+                    {this.props.pratica.propriedades.map((p) => (
+                        <Row>
+                            {p.gps.latitude !== 0.0
+                                ? this.props.pratica.propriedades.indexOf(p) + 1
+                                : ""}
+                            : {p.nome}
+                        </Row>
+                    ))}
+                </div>
+            </>
         );
     }
 }
 
 const mapStateToProps = (state) => ({
-    // data: state.praticas.data,
     pratica: state.praticas.pratica,
 });
 

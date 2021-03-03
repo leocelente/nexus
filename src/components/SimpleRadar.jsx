@@ -12,12 +12,12 @@ const colors = [
 ];
 
 let count = 0;
-function makeDataset(label, data) {
+function makeDataset(label, data, index) {
     return {
         label,
         data,
-        backgroundColor: colors[count % colors.length],
-        borderColor: colors[count++ % colors.length],
+        backgroundColor: colors[index % colors.length],
+        borderColor: colors[index % colors.length],
         borderWidth: 1,
     };
 }
@@ -25,15 +25,14 @@ function makeDataset(label, data) {
 const base = {
     labels: ["Agua", "Alimento", "Energia"],
     datasets: [
-        makeDataset("Test", [10, 3, 4]),
-        makeDataset("Test3", [2, 2, 6]),
+        makeDataset("Test", [10, 3, 4], 0),
     ],
 };
 const options = {
     scale: {
         ticks: { beginAtZero: true, suggestedMax: 10 },
         gridLines: {
-            color: "rgba(0, 0, 0, 0.5)",
+            color: "rgba(0, 0, 0, 0.36)",
         },
     },
     legend: {
@@ -43,29 +42,22 @@ const options = {
         text: "Benchmark",
         display: false,
         fullWidth: true,
-        fontSize: 24,
+        fontSize: 20,
         position: "top",
     },
-    devicePixelRatio: 1,
-    aspectRatio: 1,
-    // responsive: true,
+    responsive: true,
 };
 
 class SimpleRadar extends Component {
-    componentDidMount() {}
     render() {
         let graph = base;
         const praticas = this.props.data.temas[this.props.selectedTema]
             .praticas;
-        graph.datasets = praticas.map(pratica => {
-            const {agua, alimento, energia } = pratica.benchmark;
-            return makeDataset(pratica.nome, [agua, alimento, energia]);
+        graph.datasets = praticas.map((pratica) => {
+            const { agua, alimento, energia } = pratica.benchmark;
+            return makeDataset(pratica.nome, [agua, alimento, energia], praticas.indexOf(pratica));
         });
-        return (
-            <div>
-                <Radar data={graph} options={options} />
-            </div>
-        );
+        return <Radar data={graph} options={options} />;
     }
 }
 const mapStateToProps = (state) => ({

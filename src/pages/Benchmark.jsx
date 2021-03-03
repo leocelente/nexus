@@ -15,9 +15,9 @@ export default class Benchmark extends Component {
                         <>
                             <SimpleRadar />
                             <Card>
-                                <span style={{ color: "black" }}>
-                                    <b>Dica</b>: Cique nos items na legenda para
-                                    escoder a pratica no gráfico
+                                <span style={{ color: "#2e2e2e" }}>
+                                    Dica: Cique nos items na legenda para
+                                    esconder a pratica no gráfico
                                 </span>
                             </Card>
                         </>

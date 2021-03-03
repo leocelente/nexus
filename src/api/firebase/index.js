@@ -14,8 +14,9 @@ const firebaseConfig = {
     measurementId: process.env.REACT_APP_MEASEURE,
 };
 
-if (firebase.apps.length == 0)
+if (firebase.apps.length == 0) {
     firebase.initializeApp(firebaseConfig);
+}
 let db = firebase.firestore();
 
 
@@ -36,7 +37,6 @@ export async function fetchIndicadoresFirebase(dispatch) {
         }
     }
 
-    // console.log("GOT Indicadores:", grupos);
     dispatch({
         type: FETCH_INDICADORES,
         payload: { grupos }

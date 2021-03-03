@@ -17,24 +17,41 @@ const options = {
     scales: {
         yAxes: [
             {
+                scaleLabel: {
+                    display: true,
+                    labelString: "Old",
+                },
                 ticks: {
                     beginAtZero: true,
                 },
             },
         ],
     },
+    title: {
+        display: true,
+        text: "Some Title",
+        fontSize: 16,
+    },
+    legend: {
+        display: true,
+        position: "bottom",
+    },
     responsive: true,
 };
 
-let count = 0;
-function makeDataset(label, data) {
+function makeDataset(label, data, index) {
     return {
         label,
         data,
-        backgroundColor: colors[count % colors.length],
-        borderColor: colors[count++ % colors.length],
+        backgroundColor: colors[index % colors.length],
+        borderColor: colors[index % colors.length],
         borderWidth: 1,
     };
+}
+
+function setOptions(option, titulo, unidades) {
+    option.title.text = titulo;
+    option.scales.yAxes[0].scaleLabel.labelString = unidades;
 }
 
 const base = {
@@ -47,6 +64,16 @@ const base = {
     ],
 };
 
+const emptySelection = (
+    <>
+        <h2>Selecione um Indicador</h2>
+        <p style={{ color: "black" }}>
+            Clique em um dos indicadores na lista para ver o historico do
+            indicador nas propriedades
+        </p>
+    </>
+);
+
 class SimpleBar extends Component {
     componentDidMount() {
         this.props.fetchPropriedades();
@@ -54,64 +81,56 @@ class SimpleBar extends Component {
     }
 
     render() {
-        console.log(this.props.selectedIndicador);
         if (this.props.selectedIndicador?.indicador?.nome === "") {
-            return (
-                <>
-                    <h2>Selecione um Indicador</h2>
-                    <span style={{color: 'black'}}>
-                        Clique em um dos indicadores na lista para ver o
-                        historico do indicador nas propriedades
-                    </span>
-                </>
-            );
+            return emptySelection;
         }
         let data = base;
+
         let graficos = {};
-        //TODO: Use forEach
-        for (let i = 0; i < this.props.serie.dados.length; i++) {
-            let currentIndicador = this.props.serie.dados[i].indicador.nome;
-            graficos[currentIndicador] = { series: [] };
-            //TODO: Use forEach
-            for (let p = 0; p < this.props.serie.dados[i].data.length; p++) {
-                let dado = this.props.serie.dados[i].data[p];
-                graficos[currentIndicador].series.push({
-                    valor: dado.valor,
-                    tempo: dado.tempo,
-                    propriedade: dado.propriedade.nome,
+        this.props.serie.dados.forEach(({ indicador, data }) => {
+            let { nome, titulo, unidade } = indicador;
+            graficos[nome] = { series: [], titulo, unidade };
+            data.forEach(({ valor, tempo, propriedade }) => {
+                graficos[nome].series.push({
+                    valor,
+                    tempo,
+                    propriedade: propriedade.nome,
                 });
-            }
-        }
+            });
+        });
+
+        let option = options;
 
         for (let indicador in graficos) {
             // TODO: Use Array.find()
             if (indicador == this.props.selectedIndicador.indicador.nome) {
-                let indicador_data = graficos[indicador];
+                let { series, titulo, unidade } = graficos[indicador];
+                setOptions(option, titulo, unidade);
                 let datasets = [];
                 let labels = [];
-                indicador_data.series.forEach((ponto) => {
+                series.forEach(({ valor, tempo, propriedade }) => {
                     let dset = datasets.findIndex(
-                        (e) => e.label == ponto.propriedade
+                        ({ label }) => label == propriedade
                     );
                     if (dset === -1) {
-                        datasets.push({ label: ponto.propriedade, data: [] });
+                        datasets.push({ label: propriedade, data: [] });
                         dset = datasets.length - 1;
                     }
-                    if (!labels.includes(ponto.tempo)) {
-                        labels.push(ponto.tempo);
+                    if (!labels.includes(tempo)) {
+                        labels.push(tempo);
                     }
-                    datasets[dset].data.push(ponto.valor);
+                    datasets[dset].data.push(valor);
                 });
 
                 data.datasets = datasets.map((x) =>
-                    makeDataset(x.label, x.data)
+                    makeDataset(x.label, x.data, datasets.indexOf(x))
                 );
                 data.labels = labels;
                 break;
             }
         }
 
-        return <Bar className="left-column" data={data} options={options} />;
+        return <Bar className="left-column" data={data} options={option} />;
     }
 }
 

@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import { Button, ListGroup } from "react-bootstrap";
 
 function List(props) {
-  // eslint-disable-next-line
   const [_, setKey] = useState(0);
-
-
   return (
     <div>
-      <ListGroup defaultActiveKey={0} onSelect={(k) => {setKey(k); if(props.onSelect) props.onSelect(k)}}>
+      <ListGroup  onSelect={(k) => {setKey(k); if(props.onSelect) props.onSelect(k)}}>
         <ListGroup.Item>
           <h4>{props.title}</h4>
         </ListGroup.Item>

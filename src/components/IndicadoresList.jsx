@@ -4,17 +4,15 @@ import { selectIndicador } from "../redux/actions/indicadoresActions";
 import List from "./List";
 
 class IndicadoresList extends Component {
-
-    componentDidMount(){
+    componentDidUpdate() {
         const indicadores = this.props.data.grupos[this.props.grupo].atributos[
             this.props.atributo
         ].indicadores;
-        this.props.selectIndicador(indicadores[0]);
     }
 
     handle = (i) => {
         this.props.selectIndicador(i);
-      };
+    };
 
     render() {
         const indicadores = this.props.data.grupos[this.props.grupo].atributos[
@@ -26,7 +24,7 @@ class IndicadoresList extends Component {
                     items={indicadores.map((x) => x.nome)}
                     title="Indicadores"
                     onSaibaMais={null}
-                    onSelect = {(ind)=>this.handle(indicadores[ind])}
+                    onSelect={(ind) => this.handle(indicadores[ind])}
                 />
             </div>
         );

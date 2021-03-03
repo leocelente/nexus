@@ -3,7 +3,7 @@ import { ADD_TODO, SELECT_TEMA, FETCH_PRATICAS, SELECT_PRATICA } from "../action
 const initialState = {
     selectedIndicadores: [],
     selectedTema: 0,
-    pratica: { propriedades: [{ gps: { latitude: -22.53, longitude: -43.12 } }] },
+    pratica: { propriedades: [{ gps: { latitude: 0.0, longitude: 0.0 } }] },
     data: { temas: [{ praticas: [{ propriedades: [], benchmark: { agua: 0, alimento: 0, energia: 0 } }] }] }
 };
 
