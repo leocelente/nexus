@@ -5,7 +5,8 @@ export default class TableJson extends Component {
   render() {
     return (
       <div>
-        <Table size="sm">
+        <Table size="sm" bordered>
+            <thead></thead>
           <tbody>
             {Object.entries(this.props.data).map((elem) => (
               <tr>

@@ -21,12 +21,13 @@ class SimpleMap extends Component {
     };
 
     render() {
-        const pos = this.props.pratica.propriedades.map((p) => (
+        const propriedades = this.props.pratica.propriedades;
+        const pos = propriedades.map((p) => (
             <Marker
                 lat={p.gps.latitude}
                 lng={p.gps.longitude}
                 nome={p.nome}
-                count={this.props.pratica.propriedades.indexOf(p) + 1}
+                count={propriedades.indexOf(p) + 1}
             />
         ));
         return (
@@ -42,7 +43,7 @@ class SimpleMap extends Component {
                 </div>
                 <hr />
                 <h3>Legenda:</h3>
-                <div style={{ color: "black", }}>
+                <div style={{ color: "black" }}>
                     <Table size="sm" bordered hover>
                         <thead>
                             <tr>
@@ -50,22 +51,19 @@ class SimpleMap extends Component {
                                 <th>Nome da Propriedade</th>
                             </tr>
                         </thead>
-                    <tbody>
-                    {this.props.pratica.propriedades.map((p) => {
-                            if (p.gps.latitude !== 0.0)
-                                return (
-                                    <tr>
-                                        <td>
-                                            {this.props.pratica.propriedades.indexOf(
-                                                p
-                                            ) + 1}
-                                        </td>
-                                        <td>{p.nome}</td>
-                                    </tr>
-                                );
-                        })}
-
-                    </tbody>
+                        <tbody>
+                            {propriedades.map((p) => {
+                                if (p.gps.latitude !== 0.0)
+                                    return (
+                                        <tr>
+                                            <td>
+                                                {propriedades.indexOf(p) + 1}
+                                            </td>
+                                            <td>{p.nome}</td>
+                                        </tr>
+                                    );
+                            })}
+                        </tbody>
                     </Table>
                 </div>
             </>
