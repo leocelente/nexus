@@ -7,6 +7,7 @@ import PageBase from "../components/PageBase";
 import Select from "../components/Select";
 import SelectTema from "../components/SelectTema";
 import SimpleBar from "../components/SimpleBar";
+import VariantBar from "../components/VariantBar";
 
 export default class Indicadores extends Component {
   render() {
@@ -21,6 +22,7 @@ export default class Indicadores extends Component {
       <div>
         <PageBase
           left={<SimpleBar />}
+          extra ={<VariantBar />}
           right={
             <div>
               <Card>

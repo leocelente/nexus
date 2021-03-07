@@ -5,12 +5,13 @@ import { fetchPropriedades } from "../redux/actions/propriedadesActions";
 import { fetchSerieHist } from "../redux/actions/indicadoresActions";
 
 const colors = [
+    "rgba(255, 159, 64, 0.75)",
+    "rgba(153, 102, 255, 0.75)",
+    "rgba(75, 192, 192, 0.75)",
+
     "rgba(255, 99, 132, 0.75)",
     "rgba(54, 162, 235, 0.75)",
     "rgba(255, 206, 86, 0.75)",
-    "rgba(75, 192, 192, 0.75)",
-    "rgba(153, 102, 255, 0.75)",
-    "rgba(255, 159, 64, 0.75)",
 ];
 
 const options = {
@@ -64,16 +65,7 @@ const base = {
     ],
 };
 
-const emptySelection = (
-    <>
-        <h2>Selecione um Indicador</h2>
-        <p style={{ color: "black" }}>
-            Selecione um grupo e um atributo ao lado para ver os indicadores
-            disponíveis. Clique então em um indicador na lista para ver os dados
-            das propriedades.
-        </p>
-    </>
-);
+const emptySelection = <></>;
 
 class SimpleBar extends Component {
     componentDidMount() {
@@ -85,6 +77,7 @@ class SimpleBar extends Component {
         if (this.props.selectedIndicador?.indicador?.nome === "") {
             return emptySelection;
         }
+
         let data = base;
 
         let graficos = {};
@@ -106,25 +99,23 @@ class SimpleBar extends Component {
             if (indicador == this.props.selectedIndicador.indicador.nome) {
                 let { series, titulo, unidade } = graficos[indicador];
                 setOptions(option, titulo, unidade);
-
                 series.sort((a, b) => {
-                    if (a.tempo !== b.tempo)
-                        return a.tempo > b.tempo;
-                    else return a.propriedade > b.propriedade;
+                    if (a.propriedade !== b.propriedade)
+                        return a.propriedade > b.propriedade;
+                    else return a.tempo > b.tempo;
                 });
-
                 let datasets = [];
                 let labels = [];
                 series.forEach(({ valor, tempo, propriedade }) => {
                     let dset = datasets.findIndex(
-                        ({ label }) => label == propriedade
+                        ({ label }) => label == tempo
                     );
                     if (dset === -1) {
-                        datasets.push({ label: propriedade, data: [] });
+                        datasets.push({ label: tempo, data: [] });
                         dset = datasets.length - 1;
                     }
-                    if (!labels.includes(tempo)) {
-                        labels.push(tempo);
+                    if (!labels.includes(propriedade)) {
+                        labels.push(propriedade);
                     }
                     datasets[dset].data.push(valor);
                 });
