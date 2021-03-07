@@ -119,3 +119,10 @@ body {
 .custom-select {
     font-size: 1rem;
 }
+
+.subContainers {
+    /* height: auto; */
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+}

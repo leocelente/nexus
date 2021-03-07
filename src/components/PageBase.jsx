@@ -9,6 +9,8 @@ export class PageBase extends Component {
           <Row className="justify-content-md-center" xs={1} xl={2}>
             <Col>
               <Card>{this.props.left}</Card>
+              <br></br>
+              {this.props.extra ? <Card>{this.props.extra}</Card>: null}
             </Col>
             <Col>
               <>{this.props.right}</>

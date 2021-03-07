@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Card } from "react-bootstrap";
+import { Card, Row } from "react-bootstrap";
 import IndicadoresList from "../components/IndicadoresList";
 import PageBase from "../components/PageBase";
 import PraticasList from "../components/PraticasList";
 import SelectTema from "../components/SelectTema";
 import SimpleRadar from "../components/SimpleRadar";
+import RadarContainer from "../components/RadarContainer";
 
 export default class Benchmark extends Component {
     render() {
@@ -20,7 +21,13 @@ export default class Benchmark extends Component {
                                     esconder a pratica no gráfico
                                 </span>
                             </Card>
+                            {/* <Row className="justify-content-center"> */}
+                                
+                            {/* </Row> */}
                         </>
+                    }
+                    extra={
+                        <RadarContainer />
                     }
                     right={
                         <>

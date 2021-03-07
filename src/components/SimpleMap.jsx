@@ -10,6 +10,7 @@ const Marker = ({ count, nome }) => (
         <span className="tooltiptext">{nome}</span>
     </div>
 );
+
 class SimpleMap extends Component {
     static defaultProps = {
         center: {
@@ -45,9 +46,9 @@ class SimpleMap extends Component {
                     {this.props.pratica.propriedades.map((p) => (
                         <Row>
                             {p.gps.latitude !== 0.0
-                                ? this.props.pratica.propriedades.indexOf(p) + 1
+                                ? this.props.pratica.propriedades.indexOf(p) + 1 + ":"
                                 : ""}
-                            : {p.nome}
+                             {p.nome}
                         </Row>
                     ))}
                 </div>

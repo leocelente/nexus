@@ -68,8 +68,9 @@ const emptySelection = (
     <>
         <h2>Selecione um Indicador</h2>
         <p style={{ color: "black" }}>
-            Clique em um dos indicadores na lista para ver o historico do
-            indicador nas propriedades
+            Selecione um grupo e um atributo ao lado para ver os indicadores
+            disponíveis. Clique então em um indicador na lista para ver os dados
+            das propriedades.
         </p>
     </>
 );

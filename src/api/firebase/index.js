@@ -52,14 +52,20 @@ export async function fetchPraticasFirebase(dispatch) {
 
         const praticas_snap = (await snap[i].ref.collection("praticas").get()).docs;
         for (let j = 0; j < praticas_snap.length; ++j) {
-            temas[i].praticas[j] = {...praticas_snap[j].data(), propriedades: [] };
+            temas[i].praticas[j] = {...praticas_snap[j].data(), propriedades: [], b_atributos: [] };
             let propriedades = (await praticas_snap[j].ref.collection("propriedades").get()).docs;
             // console.log(propriedades);
             for (let p = 0; p < propriedades.length; p++) {
                 let propriedade = (await propriedades[p].data().propriedade.get()).data();
                 propriedade.gps = propriedade.gps.toJSON();
                 temas[i].praticas[j].propriedades.push(propriedade);
+            }
 
+            let b_atributos = (await praticas_snap[j].ref.collection("b_atributos").get()).docs;
+            for (let a = 0; a < b_atributos.length; a++) {
+                let b = b_atributos[a].data();
+                b.atributo = (await b.atributo.get()).data();
+                temas[i].praticas[j].b_atributos.push(b);
             }
         }
     }

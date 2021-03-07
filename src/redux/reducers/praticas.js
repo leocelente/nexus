@@ -4,7 +4,7 @@ const initialState = {
     selectedIndicadores: [],
     selectedTema: 0,
     pratica: { propriedades: [{ gps: { latitude: 0.0, longitude: 0.0 } }] },
-    data: { temas: [{ praticas: [{ propriedades: [], benchmark: { agua: 0, alimento: 0, energia: 0 } }] }] }
+    data: { temas: [{ praticas: [{ propriedades: [], b_atributos: [], benchmark: { agua: 0, alimento: 0, energia: 0 } }] }] }
 };
 
 export default function(state = initialState, action) {

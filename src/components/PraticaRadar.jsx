@@ -1,6 +1,6 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Radar } from "react-chartjs-2";
-import { connect } from "react-redux";
 
 const colors = [
     "rgba(255, 99, 132, 0.5)",
@@ -23,10 +23,9 @@ function makeDataset(label, data, index) {
 
 const base = {
     labels: ["Agua", "Alimento", "Energia"],
-    datasets: [
-        makeDataset("Test", [10, 3, 4], 0),
-    ],
+    datasets: [makeDataset("Test", [10, 3, 4], 0)],
 };
+
 const options = {
     scale: {
         ticks: { beginAtZero: true, suggestedMax: 10 },
@@ -35,6 +34,7 @@ const options = {
         },
     },
     legend: {
+        display: false,
         position: "bottom",
     },
     title: {
@@ -47,21 +47,17 @@ const options = {
     responsive: true,
 };
 
-class SimpleRadar extends Component {
+export default class PraticaRadar extends Component {
+    static propTypes = {
+        pratica: PropTypes.any,
+    };
+
     render() {
-        let graph = base;
-        const praticas = this.props.data.temas[this.props.selectedTema]
-            .praticas;
-        graph.datasets = praticas.map((pratica) => {
-            const { agua, alimento, energia } = pratica.benchmark;
-            return makeDataset(pratica.nome, [agua, alimento, energia], praticas.indexOf(pratica));
-        });
-        return <Radar data={graph} options={options} />;
+        console.log(this.props.pratica);
+        let data = base;
+        // data.datasets = [this.props.pratica];
+        const { agua, alimento, energia } = this.props.pratica.benchmark;
+        data.datasets = [makeDataset(this.props.pratica.nome, [agua, alimento, energia], 0)];
+        return <Radar data={data} options={options} />;
     }
 }
-const mapStateToProps = (state) => ({
-    data: state.praticas.data,
-    selectedTema: state.praticas.selectedTema,
-});
-
-export default connect(mapStateToProps, null)(SimpleRadar);

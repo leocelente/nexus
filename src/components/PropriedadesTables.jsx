@@ -3,6 +3,7 @@ import { ListGroup, Collapse } from "react-bootstrap";
 import TableJson from "./TableJson";
 import { connect } from "react-redux";
 import { fetchPropriedades } from "../redux/actions/propriedadesActions";
+
 function ItemCollapsable(props) {
     const [open, setOpen] = useState(false);
     return (
