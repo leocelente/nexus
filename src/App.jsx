@@ -70,8 +70,7 @@ function App() {
                     <Col lg={6} sm={12}>
                         <Row style={{ height: "4rem" }}>
                             <span className="copyright">
-                                Plataforma Nexus by NUPS. Todos os direitos
-                                reservados &copy; 2021
+                                PLACOPAS, uma parceria <a href="http://nups.shs.eesc.usp.br/">NUPS</a> e <a href="https://www.embrapa.br">EMBRAPA</a> &copy; 2021
                             </span>
                         </Row>
                     </Col>

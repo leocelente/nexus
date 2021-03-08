@@ -34,7 +34,7 @@ class PraticasList extends Component {
             .praticas;
         return (
             <div>
-                <Modal size="lg" show={this.state.show} onHide={handleClose}>
+                <Modal size="xl" show={this.state.show} onHide={handleClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>{this.state.pratica.nome}</Modal.Title>
                     </Modal.Header>
