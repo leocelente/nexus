@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import List from "./List";
+import List from "../general/List";
 
 import { connect } from "react-redux";
 import { Button, Col, Modal, Row } from "react-bootstrap";
-import TableJson from "./TableJson";
+import TableJson from "../general/TableJson";
 
-import { selectPratica } from "../redux/actions/praticasActions";
+import { selectPratica } from "../../redux/actions/praticasActions";
 import PraticaRadar from "./PraticaRadar";
 
 class PraticasList extends Component {
@@ -13,7 +13,7 @@ class PraticasList extends Component {
         super(props);
         this.state = {
             show: false,
-            pratica: {nome: "", descricao: {}, benchmark: {}},
+            pratica: { nome: "", descricao: {}, benchmark: {} },
         };
     }
     setShow(show, pratica) {
@@ -26,30 +26,41 @@ class PraticasList extends Component {
         this.props.selectPratica(i);
     };
 
-    render() {
-        const handleClose = () => this.setShow(false, {nome: "", descricao: {}, benchmark: {}});
-        const handleShow = (pratica) => this.setShow(true, pratica);
+    handleClose = () => {
+        this.setShow(false, { nome: "", descricao: {}, benchmark: {} });
+    };
 
+    handleShow = (pratica) => {
+        this.setShow(true, pratica);
+    };
+
+    render() {
         const praticas = this.props.data.temas[this.props.selectedTema]
             .praticas;
         return (
             <div>
-                <Modal size="xl" show={this.state.show} onHide={handleClose}>
+                <Modal
+                    size="xl"
+                    show={this.state.show}
+                    onHide={this.handleClose}
+                >
                     <Modal.Header closeButton>
                         <Modal.Title>{this.state.pratica.nome}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body style={{ color: "black" }}>
                         <Row>
                             <Col>
-                                <TableJson data={this.state.pratica.descricao} />
+                                <TableJson
+                                    data={this.state.pratica.descricao}
+                                />
                             </Col>
                             <Col>
-                                <PraticaRadar pratica={this.state.pratica}/>
+                                <PraticaRadar pratica={this.state.pratica} />
                             </Col>
                         </Row>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="primary" onClick={handleClose}>
+                        <Button variant="primary" onClick={this.handleClose}>
                             Close
                         </Button>
                     </Modal.Footer>
@@ -59,7 +70,7 @@ class PraticasList extends Component {
                     items={praticas.map((x) => x.nome)}
                     title="Praticas"
                     onSelect={(p) => this.handler(praticas[p])}
-                    onSaibaMais={(idx) => handleShow(praticas[idx])}
+                    onSaibaMais={(idx) => this.handleShow(praticas[idx])}
                 />
             </div>
         );

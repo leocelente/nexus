@@ -9,7 +9,6 @@ import Benchmark from "./pages/Benchmark";
 import Casos from "./pages/Casos";
 
 import img_usp from "./images/usp-preto.png";
-
 import img_embrapa from "./images/embrapa.png";
 import img_eesc from "./images/eesc-horizontal.png";
 import img_cnpq from "./images/cnpq.png";

@@ -43,9 +43,7 @@ export default class SubRadar extends Component {
         let datasets = this.props.data.map((x) => x.valor);
         let data = {
             labels,
-            datasets: [
-                makeDataset("Atributos", datasets, 0),
-            ]
+            datasets: [makeDataset("Atributos", datasets, 0)],
         };
         return (
             <div>

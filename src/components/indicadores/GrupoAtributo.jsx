@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { Col, Row } from "react-bootstrap";
-import Select from "./Select";
+import Select from "../general/Select";
 import { connect } from "react-redux";
 import {
     selectGrupo,
     selectAtributo,
     fetchIndicadores,
-} from "../redux/actions/indicadoresActions";
+} from "../../redux/actions/indicadoresActions";
 
 class GrupoAtributo extends Component {
     

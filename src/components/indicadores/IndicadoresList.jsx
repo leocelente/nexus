@@ -1,30 +1,24 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { selectIndicador } from "../redux/actions/indicadoresActions";
-import List from "./List";
+import { selectIndicador } from "../../redux/actions/indicadoresActions";
+import List from "../general/List";
 
 class IndicadoresList extends Component {
-    componentDidUpdate() {
-        const indicadores = this.props.data.grupos[this.props.grupo].atributos[
-            this.props.atributo
-        ].indicadores;
-    }
-
+    
     handle = (i) => {
         this.props.selectIndicador(i);
     };
 
     render() {
-        const indicadores = this.props.data.grupos[this.props.grupo].atributos[
-            this.props.atributo
-        ].indicadores;
+        const { grupo, grupos, atributo } = this.props;
+        const indicadores = grupos[grupo].atributos[atributo].indicadores;
         return (
             <div>
                 <List
                     items={indicadores.map((x) => x.nome)}
                     title="Indicadores"
                     onSaibaMais={null}
-                    onSelect={(ind) => this.handle(indicadores[ind])}
+                    onSelect={(i) => this.handle(indicadores[i])}
                 />
             </div>
         );
@@ -33,7 +27,7 @@ class IndicadoresList extends Component {
 
 const mapStateToProps = (state) => ({
     grupo: state.indicadores.grupo,
-    data: state.indicadores.data,
+    grupos: state.indicadores.data.grupos,
     atributo: state.indicadores.atributo,
 });
 export default connect(mapStateToProps, { selectIndicador })(IndicadoresList);

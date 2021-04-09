@@ -1,23 +1,13 @@
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
-import GrupoAtributo from "../components/GrupoAtributo";
-import IndicadoresList from "../components/IndicadoresList";
-import List from "../components/List";
-import PageBase from "../components/PageBase";
-import Select from "../components/Select";
-import SelectTema from "../components/SelectTema";
-import SimpleBar from "../components/SimpleBar";
-import VariantBar from "../components/VariantBar";
+import GrupoAtributo from "../components/indicadores/GrupoAtributo";
+import IndicadoresList from "../components/indicadores/IndicadoresList";
+import PageBase from "../components/general/PageBase";
+import SimpleBar from "../components/charts/SimpleBar";
+import VariantBar from "../components/charts/VariantBar";
 
 export default class Indicadores extends Component {
   render() {
-    const indicadores = [
-      "Indicador 1",
-      "Indicador 2",
-      "Indicador 1",
-      "Indicador 3",
-    ];
-
     return (
       <div>
         <PageBase
@@ -35,9 +25,7 @@ export default class Indicadores extends Component {
               </Card>
               <br></br>
               <GrupoAtributo />
-              
-              <br></br>
-            
+              <br></br>            
               {/* <List items={indicadores} title="Indicadores" /> */}
               <IndicadoresList />
             </div>

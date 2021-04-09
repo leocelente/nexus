@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { Card, Row } from "react-bootstrap";
-import IndicadoresList from "../components/IndicadoresList";
-import PageBase from "../components/PageBase";
-import PraticasList from "../components/PraticasList";
-import SelectTema from "../components/SelectTema";
-import SimpleRadar from "../components/SimpleRadar";
-import RadarContainer from "../components/RadarContainer";
+import PageBase from "../components/general/PageBase";
+import PraticasList from "../components/praticas/PraticasList";
+import SelectTema from "../components/praticas/SelectTema";
+import SimpleRadar from "../components/charts/SimpleRadar";
+import PropertyBar from "../components/benchmark/PropertyBar";
 
 export default class Benchmark extends Component {
     render() {
@@ -21,13 +20,11 @@ export default class Benchmark extends Component {
                                     esconder a pratica no gráfico
                                 </span>
                             </Card>
-                            {/* <Row className="justify-content-center"> */}
-                                
-                            {/* </Row> */}
+                            <PropertyBar nome="Propriedade" valor={0.75} />
+                            <PropertyBar nome="Propriedade" valor={0.25} />
+                            <PropertyBar nome="Propriedade" valor={0.5} />
+
                         </>
-                    }
-                    extra={
-                        <RadarContainer />
                     }
                     right={
                         <>

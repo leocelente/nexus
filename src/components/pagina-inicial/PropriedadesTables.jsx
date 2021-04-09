@@ -1,8 +1,8 @@
 import React, { Component, useState } from "react";
 import { ListGroup, Collapse } from "react-bootstrap";
-import TableJson from "./TableJson";
+import TableJson from "../general/TableJson";
 import { connect } from "react-redux";
-import { fetchPropriedades } from "../redux/actions/propriedadesActions";
+import { fetchPropriedades } from "../../redux/actions/propriedadesActions";
 
 function ItemCollapsable(props) {
     const [open, setOpen] = useState(false);
@@ -18,7 +18,7 @@ function ItemCollapsable(props) {
                 {props.title}
                 <span>{!open ? "+" : "-"}</span>
             </ListGroup.Item>
-            <Collapse in={open} onClick={() => {}}>
+            <Collapse in={open} onClick={null}>
                 <div id="example-collapse-text">
                     <TableJson data={props.data} />
                 </div>

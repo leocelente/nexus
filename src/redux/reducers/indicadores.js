@@ -32,7 +32,7 @@ export default function(state = initialState, action) {
             }
         case FETCH_SERIE_HIST:
             {
-                return {...state, serie: action.payload };
+                return {...state, ...action.payload };
             }
         case SELECT_INDICADOR:
             {

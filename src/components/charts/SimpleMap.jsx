@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import GoogleMapReact from "google-map-react";
 import { connect } from "react-redux";
-import "../css/marker.css";
-import { Row, Table } from "react-bootstrap";
+import "../../css/marker.css";
+import { Table } from "react-bootstrap";
 
 const Marker = ({ count, nome }) => (
     <div className="pin">

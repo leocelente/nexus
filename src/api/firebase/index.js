@@ -1,6 +1,11 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
-import { FETCH_INDICADORES, FETCH_PRATICAS, FETCH_PROPRIEDADES, FETCH_SERIE_HIST } from "../../redux/actions";
+import {
+    FETCH_INDICADORES,
+    FETCH_PRATICAS,
+    FETCH_PROPRIEDADES,
+    FETCH_SERIE_HIST
+} from "../../redux/actions";
 
 
 const firebaseConfig = {
@@ -14,28 +19,52 @@ const firebaseConfig = {
     measurementId: process.env.REACT_APP_MEASEURE,
 };
 
-if (firebase.apps.length == 0) {
+if (firebase.apps.length === 0) {
     firebase.initializeApp(firebaseConfig);
 }
 let db = firebase.firestore();
 
+class Helpers {
 
+    static async getCollection(ref, path = "/") {
+        return (await ref.collection(path).get()).docs;
+    }
 
-export async function fetchIndicadoresFirebase(dispatch) {
-    let grupos = [];
-    const snap = (await db.collection("indicadores").get()).docs;
-    for (let i = 0; i < snap.length; ++i) {
-        grupos[i] = { nome: snap[i].data().nome, atributos: [] };
-        const snap_atributos = (await snap[i].ref.collection("atributos").get()).docs;
-        for (let j = 0; j < snap_atributos.length; ++j) {
-            grupos[i].atributos[j] = snap_atributos[j].data();
-            grupos[i].atributos[j].indicadores = []
-            const indicadores_snap = (await snap_atributos[j].ref.collection("indicadores").get()).docs;
-            for (let k = 0; k < indicadores_snap.length; ++k) {
-                grupos[i].atributos[j].indicadores[k] = indicadores_snap[k].data();
-            }
+    static async followReference(ref) {
+        return (await ref.get()).data();
+    }
+
+    /**
+     * Applies `await fun` to elements in the array
+     * @param {Array} array 
+     * @param {Function} fun 
+     */
+    static async asyncForEach(array, fun) {
+        for (let i = 0; i < array.length; i++) {
+            await fun(array[i], i);
         }
     }
+}
+
+/**
+ * Retorna todos os indicadores do banco de dados
+ * e dispara (dispatch) um evento para o redux
+ * @param {Function} dispatch 
+ */
+export async function fetchIndicadoresFirebase(dispatch) {
+    let grupos = [];
+    const snap = await Helpers.getCollection(db, "indicadores");
+    await Helpers.asyncForEach(snap, async(grupo, i) => {
+        grupos[i] = {...grupo.data(), atributos: [] };
+        const atributos = await Helpers.getCollection(grupo.ref, "atributos");
+        await Helpers.asyncForEach(atributos, async(atributo, j) => {
+            grupos[i].atributos[j] = {...atributo.data(), indicadores: [] };
+            const indicadores = await Helpers.getCollection(atributo.ref, "indicadores");
+            indicadores.forEach((indicador, k) => {
+                grupos[i].atributos[j].indicadores[k] = indicador.data();
+            });
+        });
+    });
 
     dispatch({
         type: FETCH_INDICADORES,
@@ -46,30 +75,21 @@ export async function fetchIndicadoresFirebase(dispatch) {
 
 export async function fetchPraticasFirebase(dispatch) {
     let temas = [];
-    const snap = (await db.collection("praticas").get()).docs;
-    for (let i = 0; i < snap.length; ++i) {
-        temas[i] = { nome: snap[i].data().nome, praticas: [{ propriedades: [] }] };
-
-        const praticas_snap = (await snap[i].ref.collection("praticas").get()).docs;
-        for (let j = 0; j < praticas_snap.length; ++j) {
-            temas[i].praticas[j] = {...praticas_snap[j].data(), propriedades: [], b_atributos: [] };
-            let propriedades = (await praticas_snap[j].ref.collection("propriedades").get()).docs;
-            // console.log(propriedades);
-            for (let p = 0; p < propriedades.length; p++) {
-                let propriedade = (await propriedades[p].data().propriedade.get()).data();
+    const snap = await Helpers.getCollection(db, "praticas");
+    await Helpers.asyncForEach(snap, async(tema, i) => {
+        temas[i] = {...snap[i].data(), praticas: [{ propriedades: [] }] };
+        const praticas = await Helpers.getCollection(tema.ref, "praticas");
+        await Helpers.asyncForEach(praticas, async(pratica, j) => {
+            temas[i].praticas[j] = {...pratica.data(), propriedades: [], b_atributos: [] };
+            const propriedades = await Helpers.getCollection(pratica.ref, "propriedades");
+            await Helpers.asyncForEach(propriedades, async(propriedade_ref, k) => {
+                let propriedade = await Helpers.followReference(propriedade_ref.data().propriedade);
                 propriedade.gps = propriedade.gps.toJSON();
                 temas[i].praticas[j].propriedades.push(propriedade);
-            }
+            });
+        });
+    });
 
-            let b_atributos = (await praticas_snap[j].ref.collection("b_atributos").get()).docs;
-            for (let a = 0; a < b_atributos.length; a++) {
-                let b = b_atributos[a].data();
-                b.atributo = (await b.atributo.get()).data();
-                temas[i].praticas[j].b_atributos.push(b);
-            }
-        }
-    }
-    // console.log("GOT PRATICAS:", temas);
     dispatch({
         type: FETCH_PRATICAS,
         payload: { temas }
@@ -79,13 +99,11 @@ export async function fetchPraticasFirebase(dispatch) {
 
 export async function fetchPropriedadesFirebase(dispatch) {
     let propriedades = [];
-    const snap = (await db.collection("propriedades").get()).docs;
-    for (let i = 0; i < snap.length; i++) {
-        const element = snap[i].data();
-        propriedades[i] = element;
+    const snap = await Helpers.getCollection(db, "propriedades");
+    await Helpers.asyncForEach(snap, async(propriedade, i) => {
+        propriedades[i] = propriedade.data();
+    });
 
-    }
-    // console.log("GOT PROPRIEDADES:", propriedades);
     dispatch({
         type: FETCH_PROPRIEDADES,
         payload: { propriedades }
@@ -95,23 +113,40 @@ export async function fetchPropriedadesFirebase(dispatch) {
 
 export async function fetchSerieHistoricaFirebase(dispatch) {
     let dados = [];
-    const indicadores_snap = (await db.collection("serie_historica").get()).docs;
-    for (let i = 0; i < indicadores_snap.length; i++) {
-        dados[i] = indicadores_snap[i].data();
-        dados[i].indicador = (await dados[i].indicador.get()).data();
+    const indicadores = await Helpers.getCollection(db, "serie_historica");
+    await Helpers.asyncForEach(indicadores, async(indicador, i) => {
+        dados[i] = indicadores[i].data();
+        dados[i].indicador = await Helpers.followReference(dados[i].indicador); //(await dados[i].indicador.get()).data();
         dados[i].data = [{ indicador: { nome: "" } }];
-        let data_snap = (await indicadores_snap[i].ref.collection("data").get()).docs;
-        for (let j = 0; j < data_snap.length; j++) {
-            dados[i].data[j] = data_snap[j].data();
-            dados[i].data[j].propriedade = (await dados[i].data[j].propriedade.get()).data();
-        }
-    }
+        const data = await Helpers.getCollection(indicador.ref, "data");
+        await Helpers.asyncForEach(data, async(ponto, j) => {
+            dados[i].data[j] = ponto.data();
+            dados[i].data[j].propriedade = await Helpers.followReference(ponto.data().propriedade);
+        });
+    });
+
+    let graficos = {};
+    dados.forEach(({ indicador, data }) => {
+        let { nome, titulo, unidade } = indicador;
+        graficos[nome] = { byProp: {}, series: [], titulo, unidade, min: 1e12, max: -1e12 };
+        data.forEach(({ valor, tempo, propriedade }) => {
+            graficos[nome].series.push({
+                valor,
+                tempo,
+                propriedade: propriedade.nome,
+            });
+            if (!graficos[nome].byProp[propriedade.nome]) {
+                graficos[nome].byProp[propriedade.nome] = []
+            } else {
+                graficos[nome].byProp[propriedade.nome].push({ valor, tempo });
+            }
+            graficos[nome].min = Math.min(graficos[nome].min, valor);
+            graficos[nome].max = Math.max(graficos[nome].max, valor);
+        });
+    });
+
     dispatch({
         type: FETCH_SERIE_HIST,
-        payload: { dados }
+        payload: { dados, graficos }
     });
-}
-
-export async function fetchBenchmarks(dispatch) {
-    const indicadores_snap = (await db.collection("benchmarks").get()).docs;
 }

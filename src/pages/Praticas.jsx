@@ -1,16 +1,9 @@
 import React, { Component } from "react";
-import List from "../components/List";
-
-import Mapa from "../images/mapa-região.jpeg";
-
-import PageBase from "../components/PageBase";
-import { Card, Image } from "react-bootstrap";
-import Select from "../components/Select";
-
-import { selectTema } from "../redux/actions/praticasActions";
-import SelectTema from "../components/SelectTema";
-import PraticasList from "../components/PraticasList";
-import SimpleMap from "../components/SimpleMap";
+import PageBase from "../components/general/PageBase";
+import { Card} from "react-bootstrap";
+import SelectTema from "../components/praticas/SelectTema";
+import PraticasList from "../components/praticas/PraticasList";
+import SimpleMap from "../components/charts/SimpleMap";
 
 export default class Praticas extends Component {
   render() {
@@ -30,8 +23,6 @@ export default class Praticas extends Component {
                 </Card.Text>
               </Card>
               <br></br>
-
-              {/* <Select title="Tema" items={temas}/> */}
               <SelectTema />
               <br></br>
 

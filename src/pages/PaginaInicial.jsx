@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Modal, Col, Container, Row, Image } from "react-bootstrap";
 import equipe from "../images/equipe_cropped.jpg";
-import PropriedadesTables from "../components/PropriedadesTables";
+import PropriedadesTables from "../components/pagina-inicial/PropriedadesTables";
 import textos from "../api/mock/inicial";
 export default class PaginaInicial extends Component {
   constructor(props) {
