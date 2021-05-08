@@ -1,4 +1,6 @@
 # PLACOPAS - NEXUS
+
+## Veja a Wiki para requisitos do Projeto
 ## Plataforma Cooperativa de Praticas Agricolas Sustentaveis
 Author: Leonardo Celente
 ## Objetivo

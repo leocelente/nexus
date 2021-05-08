@@ -7,7 +7,8 @@ import {
     FETCH_SERIE_HIST
 } from "../../redux/actions";
 
-
+// Configuração do banco de dados Firebase usando 
+// os valores disponiveis no serviço de hospedagem
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIRESTORE,
     authDomain: process.env.REACT_APP_DOMAIN,
@@ -24,12 +25,14 @@ if (firebase.apps.length === 0) {
 }
 let db = firebase.firestore();
 
+// Agrupamento de métodos para facilitar interagir com as estruturas do Firebase
 class Helpers {
 
+    // Pega os valores de uma collection (array) de um documento
     static async getCollection(ref, path = "/") {
-        return (await ref.collection(path).get()).docs;
-    }
-
+            return (await ref.collection(path).get()).docs;
+        }
+        // segue um referencia para outro documento
     static async followReference(ref) {
         return (await ref.get()).data();
     }
@@ -53,6 +56,7 @@ class Helpers {
  */
 export async function fetchIndicadoresFirebase(dispatch) {
     let grupos = [];
+    // se chama "indicadores" mas em teoria são os grupos
     const snap = await Helpers.getCollection(db, "indicadores");
     await Helpers.asyncForEach(snap, async(grupo, i) => {
         grupos[i] = {...grupo.data(), atributos: [] };
@@ -110,7 +114,11 @@ export async function fetchPropriedadesFirebase(dispatch) {
     });
 }
 
-
+/**
+ * A serie historia contem pontos individuais. Essa função percorre esse array
+ * e constroi um objeto organizando por Indicador e de bonus calcula o valor de 
+ * máximo e minimo de cada um que depois serão usados para normalização
+ */
 export async function fetchSerieHistoricaFirebase(dispatch) {
     let dados = [];
     const indicadores = await Helpers.getCollection(db, "serie_historica");
@@ -124,7 +132,6 @@ export async function fetchSerieHistoricaFirebase(dispatch) {
             dados[i].data[j].propriedade = await Helpers.followReference(ponto.data().propriedade);
         });
     });
-
     let graficos = {};
     dados.forEach(({ indicador, data }) => {
         let { nome, titulo, unidade } = indicador;
@@ -140,10 +147,19 @@ export async function fetchSerieHistoricaFirebase(dispatch) {
             } else {
                 graficos[nome].byProp[propriedade.nome].push({ valor, tempo });
             }
-            graficos[nome].min = Math.min(graficos[nome].min, valor);
-            graficos[nome].max = Math.max(graficos[nome].max, valor);
+            if (Object.entries(valor).length != 0) {
+                let kvs = Object.entries(valor);
+                kvs.forEach(kv => {
+                    graficos[nome].min = Math.min(graficos[nome].min, kv[1]);
+                    graficos[nome].max = Math.max(graficos[nome].max, kv[1]);
+                });
+            } else {
+                graficos[nome].min = Math.min(graficos[nome].min, valor);
+                graficos[nome].max = Math.max(graficos[nome].max, valor);
+            }
         });
     });
+    console.log(graficos);
 
     dispatch({
         type: FETCH_SERIE_HIST,

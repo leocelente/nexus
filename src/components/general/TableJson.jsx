@@ -1,7 +1,18 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Table } from "react-bootstrap";
-
+/**
+ * Constroi uma tabela HTML com base em um elemento JSON
+ * A coluna da esquerda são as keys e da direita os valores:
+ * 
+ * { 
+ *    "A": 1,
+ *    "B": 2,
+ * } vira
+ * 
+ * |A |1 |
+ * |B |2 |
+ */
 export default class TableJson extends Component {
     static propTypes = {
         data: PropTypes.any

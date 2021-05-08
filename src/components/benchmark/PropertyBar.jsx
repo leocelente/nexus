@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Card, ProgressBar } from "react-bootstrap";
 
+/**
+ * Wraper para o ProgresssBar do Bootstrap
+ * candidato a ser usado para visualização dos
+ * benchmarks
+ */
 export default class PropertyBar extends Component {
     static propTypes = {
         nome: PropTypes.string,

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
-
+/**
+ * Wrapper para o layout de duas colunas do boostrap
+ */
 export class PageBase extends Component {
   render() {
     return (

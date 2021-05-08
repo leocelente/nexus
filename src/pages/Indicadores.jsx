@@ -6,6 +6,11 @@ import PageBase from "../components/general/PageBase";
 import SimpleBar from "../components/charts/SimpleBar";
 import VariantBar from "../components/charts/VariantBar";
 
+/**
+ * Pagina dos Indicadores, duas colunas uma com os graficos e outra com 
+ * as opções para selecionar o Grupo e Atributo dentro do GRupo e finalmente o 
+ * Indicador numa lista
+ */
 export default class Indicadores extends Component {
   render() {
     return (

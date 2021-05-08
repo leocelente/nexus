@@ -1,3 +1,8 @@
+/**
+ * Componente "depreciado" seria usado para visualizar um radar do eixo 
+ * nexus por pratica dentro de um tema
+ */
+
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Radar } from "react-chartjs-2";

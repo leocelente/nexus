@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { Button, ListGroup } from "react-bootstrap";
-
+/**
+ * Wrapper para o ListGroup da React-Boostrap com 
+ * eventos do botão e um botão extra em cada linha para 
+ * mais informações (saiba mais), caso não null
+ */
 function List(props) {
   const [_, setKey] = useState(0);
   return (

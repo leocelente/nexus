@@ -1,3 +1,8 @@
+/**
+ * Componente "depreciado" iria ser usado para mostrar a pontuação
+ * de todas as praticas de um tema de acordo com os eixos do nexus 
+ * (agua, alimento, energia) mas está sendo pensada uma outra visualização
+ */
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
 import { Radar } from "react-chartjs-2";
@@ -13,6 +18,9 @@ const colors = [
     "rgba(255, 159, 64, 0.5)",
 ];
 
+// Cria um dataset para a biblioteca ChartJs com o 
+// nome label e dados data, o index é utilizado para selecionar
+// uma cor dos valores acima
 function makeDataset(label, data, index) {
     return {
         label,
@@ -50,6 +58,8 @@ const options = {
 
 class SimpleRadar extends Component {
     render() {
+        // lembrando que os indicadores são 
+        // organizados em grupos->atributos->indicadores
         const { grupos, graficos } = this.props;
         if (graficos === undefined) return <></>;
         grupos.forEach((indicador) => {
@@ -77,7 +87,7 @@ class SimpleRadar extends Component {
                 ].map(({ norm, tempo }) => ({ norm, tempo }));
             });
         });
-        console.log(tabela);
+
         return (
             <>
                 {Object.entries(tabela).map((kv) => {

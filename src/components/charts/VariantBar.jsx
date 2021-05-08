@@ -3,6 +3,14 @@ import { Bar } from "react-chartjs-2";
 import { connect } from "react-redux";
 import { fetchPropriedades } from "../../redux/actions/propriedadesActions";
 import { fetchSerieHist } from "../../redux/actions/indicadoresActions";
+import { ButtonGroup, Col, Dropdown } from "react-bootstrap";
+
+/**
+ * Repetição de código. Faz a mesma coisa do que o grafico de barras normal
+ * mas altera a função de ordenação. Faz com que o eixo x agrupe por propriedade 
+ * depois por ano
+ */
+
 
 const colors = [
     "rgba(255, 159, 64, 0.75)",
@@ -95,23 +103,56 @@ class SimpleBar extends Component {
                 return a.propriedade > b.propriedade;
             else return a.tempo > b.tempo;
         });
+
         let datasets = [];
         let labels = [];
+
         series.forEach(({ valor, tempo, propriedade }) => {
-            let dset = datasets.findIndex(({ label }) => label == tempo);
+            let dset = datasets.findIndex(({ label }) => label === propriedade);
             if (dset === -1) {
-                datasets.push({ label: tempo, data: [] });
+                datasets.push({ label: propriedade, data: [] });
                 dset = datasets.length - 1;
             }
-            if (!labels.includes(propriedade)) {
-                labels.push(propriedade);
+            if (!labels.includes(tempo)) {
+                labels.push(tempo);
             }
+
             datasets[dset].data.push(valor);
         });
-        data.datasets = datasets.map((x, i) => makeDataset(x.label, x.data, i));
-        data.labels = labels;
 
-        return <Bar className="left-column" data={data} options={option} />;
+        let b = {};
+        datasets.forEach((prop, i) => {
+            prop.data.forEach((point, j) => {
+                if (
+                    prop.data.length !== 0 &&
+                    Object.entries(prop.data[0]).length > 0
+                ) {
+                    Object.entries(point).forEach((val, k) => {
+                        let t = prop.label + " (" + val[0] + ")";
+                        if (!b[t]) b[t] = [];
+                        b[t].push(val[1]);
+                    });
+                } else {
+                    if (!b[prop.label]) b[prop.label] = [];
+                    b[prop.label] = prop.data;
+                }
+            });
+        });
+        data.labels = labels;
+        data.datasets = Object.entries(b).map((kv, i) => {
+            console.log(kv);
+            return makeDataset(kv[0], kv[1], i);
+        });
+
+        return (
+            <Col>
+                <Dropdown title="Gráfico" as={ButtonGroup} size="sm">
+                    <Dropdown.Item eventKey="0">Barras</Dropdown.Item>
+                    <Dropdown.Item eventKey="1">Linha</Dropdown.Item>
+                </Dropdown>
+                <Bar className="left-column" data={data}  options={option} />
+            </Col>
+        );
     }
 }
 

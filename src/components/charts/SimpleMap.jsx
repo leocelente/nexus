@@ -1,9 +1,21 @@
+/***
+ * Dada a pratica selecionada renderiza o Google Maps
+ * mostrando a localização das propriedades usando essa
+ * pratica
+ */
+
 import React, { Component } from "react";
 import GoogleMapReact from "google-map-react";
 import { connect } from "react-redux";
 import "../../css/marker.css";
 import { Table } from "react-bootstrap";
 
+/**
+ * 
+ * @param {} paremetros
+ * O count é o numero do pino e o nome é o texto que aparece no hover 
+ * @returns componente com estilo de marcador
+ */
 const Marker = ({ count, nome }) => (
     <div className="pin">
         {count}
@@ -22,6 +34,9 @@ class SimpleMap extends Component {
 
     render() {
         const propriedades = this.props.pratica.propriedades;
+        // constroi um marcador para cada propriedade 
+        // note que essa propriedades estão dentro da pratica
+        // é o subconjunto de propriedades que fazem uso da pratica
         const pos = propriedades.map((p) => (
             <Marker
                 lat={p.gps.latitude}

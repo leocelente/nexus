@@ -3,6 +3,12 @@ import { Button, Modal, Col, Container, Row, Image } from "react-bootstrap";
 import equipe from "../images/equipe_cropped.jpg";
 import PropriedadesTables from "../components/pagina-inicial/PropriedadesTables";
 import textos from "../api/mock/inicial";
+
+/**
+ * Página inicial, mostra as informações do projeto e da equipe. 
+ * Atualmente mostra as informações das propriedades mas devido a questões de
+ * privacidade devem ser colocadas depois de um login 
+ */
 export default class PaginaInicial extends Component {
   constructor(props) {
     super(props);

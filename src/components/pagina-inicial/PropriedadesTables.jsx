@@ -4,6 +4,10 @@ import TableJson from "../general/TableJson";
 import { connect } from "react-redux";
 import { fetchPropriedades } from "../../redux/actions/propriedadesActions";
 
+/**
+ * Mostra as informações de uma propriedade na forma de um 
+ * pop-up com um tabela (TableJson)
+ */
 function ItemCollapsable(props) {
     const [open, setOpen] = useState(false);
     return (

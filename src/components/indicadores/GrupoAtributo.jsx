@@ -8,6 +8,10 @@ import {
     fetchIndicadores,
 } from "../../redux/actions/indicadoresActions";
 
+/**
+ * Constroi os DropDown para selecionar o Grupo e Atributo 
+ * para ver a lista de Indicadores
+ */
 class GrupoAtributo extends Component {
     
     componentDidMount(){

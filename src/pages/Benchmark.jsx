@@ -5,7 +5,11 @@ import PraticasList from "../components/praticas/PraticasList";
 import SelectTema from "../components/praticas/SelectTema";
 import SimpleRadar from "../components/charts/SimpleRadar";
 import PropertyBar from "../components/benchmark/PropertyBar";
-
+/**
+ * Página de benchmark está menos definida, em teoria mostraria o
+ * grafico de como praticas se relacionam com indicadores [normalizados]. Mas
+ * qual a forma dessa visualização ainda não está definido
+ */
 export default class Benchmark extends Component {
     render() {
         return (
@@ -20,6 +24,7 @@ export default class Benchmark extends Component {
                                     esconder a pratica no gráfico
                                 </span>
                             </Card>
+                            {/* Testes */}
                             <PropertyBar nome="Propriedade" valor={0.75} />
                             <PropertyBar nome="Propriedade" valor={0.25} />
                             <PropertyBar nome="Propriedade" valor={0.5} />
