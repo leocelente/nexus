@@ -87,12 +87,17 @@ export async function fetchPraticasFirebase(dispatch) {
     const snap = await Helpers.getCollection(db, "praticas");
     await Helpers.asyncForEach(snap, async(tema, i) => {
 
-        temas[i] = {...snap[i].data(), praticas: [{ propriedades: [] }] };
+        temas[i] = {...snap[i].data(), praticas: [{ propriedades: [], b_atributos: [] }] };
         const praticas = await Helpers.getCollection(tema.ref, "praticas");
 
         await Helpers.asyncForEach(praticas, async(pratica, j) => {
 
             temas[i].praticas[j] = {...pratica.data(), propriedades: [], b_atributos: [] };
+            if (temas[i].praticas[j].benchmark === undefined)
+                temas[i].praticas[j].benchmark = { agua: 0, alimento: 0, energia: 0 };
+            if (temas[i].praticas[j].descricao === undefined)
+                temas[i].praticas[j].descricao = { Dado: "Não há Dados" };
+
             const propriedades = await Helpers.getCollection(pratica.ref, "propriedades");
 
             await Helpers.asyncForEach(propriedades, async(propriedade_ref, k) => {
