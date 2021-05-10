@@ -23,7 +23,7 @@ const firebaseConfig = {
 if (firebase.apps.length === 0) {
     firebase.initializeApp(firebaseConfig);
 }
-let db = firebase.firestore();
+const db = firebase.firestore();
 
 // Agrupamento de métodos para facilitar interagir com as estruturas do Firebase
 class Helpers {
@@ -58,9 +58,11 @@ export async function fetchIndicadoresFirebase(dispatch) {
     let grupos = [];
     // se chama "indicadores" mas em teoria são os grupos
     const snap = await Helpers.getCollection(db, "indicadores");
+
     await Helpers.asyncForEach(snap, async(grupo, i) => {
         grupos[i] = {...grupo.data(), atributos: [] };
         const atributos = await Helpers.getCollection(grupo.ref, "atributos");
+
         await Helpers.asyncForEach(atributos, async(atributo, j) => {
             grupos[i].atributos[j] = {...atributo.data(), indicadores: [] };
             const indicadores = await Helpers.getCollection(atributo.ref, "indicadores");
@@ -76,20 +78,29 @@ export async function fetchIndicadoresFirebase(dispatch) {
     });
 }
 
-
+/**
+ * Pega dados das Praticas do banco de dados
+ * @param {Function} dispatch 
+ */
 export async function fetchPraticasFirebase(dispatch) {
     let temas = [];
     const snap = await Helpers.getCollection(db, "praticas");
     await Helpers.asyncForEach(snap, async(tema, i) => {
+
         temas[i] = {...snap[i].data(), praticas: [{ propriedades: [] }] };
         const praticas = await Helpers.getCollection(tema.ref, "praticas");
+
         await Helpers.asyncForEach(praticas, async(pratica, j) => {
+
             temas[i].praticas[j] = {...pratica.data(), propriedades: [], b_atributos: [] };
             const propriedades = await Helpers.getCollection(pratica.ref, "propriedades");
+
             await Helpers.asyncForEach(propriedades, async(propriedade_ref, k) => {
                 let propriedade = await Helpers.followReference(propriedade_ref.data().propriedade);
+
                 propriedade.gps = propriedade.gps.toJSON();
                 temas[i].praticas[j].propriedades.push(propriedade);
+
             });
         });
     });
@@ -100,7 +111,10 @@ export async function fetchPraticasFirebase(dispatch) {
     });
 }
 
-
+/**
+ * Pega os dados das propriedades
+ * @param {Function} dispatch 
+ */
 export async function fetchPropriedadesFirebase(dispatch) {
     let propriedades = [];
     const snap = await Helpers.getCollection(db, "propriedades");
@@ -115,11 +129,13 @@ export async function fetchPropriedadesFirebase(dispatch) {
 }
 
 /**
- * A serie historia contem pontos individuais. Essa função percorre esse array
- * e constroi um objeto organizando por Indicador e de bonus calcula o valor de 
- * máximo e minimo de cada um que depois serão usados para normalização
+ * 
+ * @returns A serie historia contem pontos individuais. 
+ * Essa função percorre esse array e constroi um objeto
+ * e completa (segue) referencias aos indicadores e 
+ * propriedades
  */
-export async function fetchSerieHistoricaFirebase(dispatch) {
+async function getSerieHistoricaRaw() {
     let dados = [];
     const indicadores = await Helpers.getCollection(db, "serie_historica");
     await Helpers.asyncForEach(indicadores, async(indicador, i) => {
@@ -132,21 +148,36 @@ export async function fetchSerieHistoricaFirebase(dispatch) {
             dados[i].data[j].propriedade = await Helpers.followReference(ponto.data().propriedade);
         });
     });
+    return dados;
+}
+
+/**
+ * 
+ * @param {Array} dados Array JS com a serie historica 
+ * @returns organiza por indicador e dentro de indicador
+ * tambem por propriedade
+ */
+function orderRawSerieHistorica(dados) {
     let graficos = {};
     dados.forEach(({ indicador, data }) => {
+
         let { nome, titulo, unidade } = indicador;
         graficos[nome] = { byProp: {}, series: [], titulo, unidade, min: 1e12, max: -1e12 };
+
         data.forEach(({ valor, tempo, propriedade }) => {
+            // por indicador
             graficos[nome].series.push({
                 valor,
                 tempo,
                 propriedade: propriedade.nome,
             });
+
+
             if (!graficos[nome].byProp[propriedade.nome]) {
                 graficos[nome].byProp[propriedade.nome] = []
-            } else {
-                graficos[nome].byProp[propriedade.nome].push({ valor, tempo });
             }
+            graficos[nome].byProp[propriedade.nome].push({ valor, tempo });
+
             if (Object.entries(valor).length != 0) {
                 let kvs = Object.entries(valor);
                 kvs.forEach(kv => {
@@ -159,7 +190,18 @@ export async function fetchSerieHistoricaFirebase(dispatch) {
             }
         });
     });
-    console.log(graficos);
+    return graficos;
+}
+
+
+/**
+ *  organizando por Indicador e de bonus calcula o valor de 
+ * máximo e minimo de cada um que depois serão usados para normalização
+ */
+export async function fetchSerieHistoricaFirebase(dispatch) {
+
+    const dados = await getSerieHistoricaRaw();
+    const graficos = orderRawSerieHistorica(dados);
 
     dispatch({
         type: FETCH_SERIE_HIST,
