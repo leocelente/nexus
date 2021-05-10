@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Form } from "react-bootstrap";
 /**
- * Wrapper para o selecionador "combobox" 
+ * Wrapper para o selecionador "dropdown" 
  */
 export default function Select(props) {
   return (

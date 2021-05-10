@@ -9,8 +9,9 @@ import { Table } from "react-bootstrap";
  *    "A": 1,
  *    "B": 2,
  * } vira
- * 
+ * ._____.
  * |A |1 |
+ * +-----+
  * |B |2 |
  */
 export default class TableJson extends Component {

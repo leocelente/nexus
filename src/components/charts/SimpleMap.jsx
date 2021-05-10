@@ -57,7 +57,9 @@ class SimpleMap extends Component {
                     </GoogleMapReact>
                 </div>
                 <hr />
-                <h3>Legenda:</h3>
+                <h3>Legenda:</h3> 
+                {/* Tabela contendo uma legenda ligando index de pontos e as
+                propriedades que eles representam */}
                 <div style={{ color: "black" }}>
                     <Table size="sm" bordered hover>
                         <thead>

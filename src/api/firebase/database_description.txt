@@ -1,0 +1,30 @@
+Vendor: Google Firebase Firestore
+Type: NoSQL 
+Root: "/"
+Description:
+    Organizado em documetos e coleções, docs contem dados e coleções contem docs
+    Docs podem conter: Strings, Numbers, Maps(Objetos), Coordinates (GPS) e 
+    e Referencias a outros documentos. Documentos quando adicionados a coleções
+    geralemente tem indentificadores auto-gerados (hashes)
+
+1. Estruturação
+
+Espelha a estrutura dos dados:
+    Grupos {agua, alimento, energia}
+      |
+      +-- Atributos 
+              |
+              +-- Indicadores 
+    Temas
+      |
+      +-- Praticas
+
+    Propriedades
+        
+Como na plataforma é esperada que os dados que estão relacionados a Indicadores
+são esperados que tenham uma frequencia mais alta de alterações. Então foi 
+criado um documento na root para armazenar apenas os dados e qual indicador é
+referenciado:
+
+    SerieHistórica
+
