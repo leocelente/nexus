@@ -8,7 +8,7 @@
  */
 import React, { Component} from "react";
 import { Bar,Line } from "react-chartjs-2";
-import { connect } from "r5act-redux";
+import { connect } from "react-redux";
 import { fetchPropriedades } from "../../redux/actions/propriedadesActions";
 import { fetchSerieHist } from "../../redux/actions/indicadoresActions";
 import pattern from "patternomaly"; // Biblioteca para gerar padrões (quadradinhos)
