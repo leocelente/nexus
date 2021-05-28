@@ -35,8 +35,7 @@ class PraticasList extends Component {
     };
 
     render() {
-        const praticas = this.props.data.temas[this.props.selectedTema]
-            .praticas;
+        const praticas = this.props.temas[this.props.selectedTema].praticas;
         return (
             <div>
                 <Modal
@@ -79,6 +78,6 @@ class PraticasList extends Component {
 
 const mapStateToProps = (state) => ({
     selectedTema: state.praticas.selectedTema,
-    data: state.praticas.data,
+    temas: state.praticas.temas,
 });
 export default connect(mapStateToProps, { selectPratica })(PraticasList);

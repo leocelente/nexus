@@ -27,7 +27,7 @@ class SelectTema extends Component {
 }
 const mapStateToProps = (state) => ({
     current: state.praticas.selectedTema,
-    temas: state.praticas.data.temas,
+    temas: state.praticas.temas,
 });
 export default connect(mapStateToProps, { selectTema, fetchPraticas })(
     SelectTema

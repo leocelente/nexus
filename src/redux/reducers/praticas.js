@@ -8,13 +8,11 @@ const initialState = {
     pratica: {
         propriedades: [new Propriedade({})],
     },
-    data: {
-        temas: [
-            {
-                praticas: [new Pratica({})],
-            },
-        ],
-    },
+    temas: [
+        {
+            praticas: [new Pratica({})],
+        },
+    ],
 };
 
 export default function (state = initialState, action) {
@@ -22,7 +20,7 @@ export default function (state = initialState, action) {
         case SELECT_TEMA:
         case SELECT_PRATICA:
         case FETCH_PRATICAS: {
-            return { ...state, data: action.payload };
+            return { ...state, ...action.payload };
         }
         default:
             return state;

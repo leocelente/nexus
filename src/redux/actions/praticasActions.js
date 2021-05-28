@@ -1,18 +1,16 @@
 import { fetchPraticasFirebase } from "../../api/firebase/index.js";
 import { SELECT_TEMA, SELECT_PRATICA } from "./index.js";
 
-
-export const selectTema = id => ({
+export const selectTema = (id) => ({
     type: SELECT_TEMA,
-    payload: { id }
+    payload: { selectedTema: id },
 });
 
-export const selectPratica = pratica => ({
+export const selectPratica = (pratica) => ({
     type: SELECT_PRATICA,
-    payload: { pratica }
+    payload: { pratica },
 });
 
-
-export const fetchPraticas = () => async dispatch => {
+export const fetchPraticas = () => async (dispatch) => {
     await fetchPraticasFirebase(dispatch);
 };
