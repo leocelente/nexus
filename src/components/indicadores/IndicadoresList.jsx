@@ -8,21 +8,23 @@ import List from "../general/List";
  * de saiba mais
  */
 class IndicadoresList extends Component {
-    
     handle = (i) => {
         this.props.selectIndicador(i);
     };
 
     showIndicador = (indicador, array) => {
-        if(indicador === undefined){
+        if (indicador === undefined) {
             return "";
         }
         return indicador.nome;
-    }
+    };
 
     render() {
         const { grupo, grupos, atributo } = this.props;
-        const indicadores = grupos[grupo].atributos[atributo].indicadores;
+        const indicadores = grupos[grupo]?.atributos[atributo]?.indicadores;
+        if (indicadores === undefined) {
+            return <div></div>;
+        }
         return (
             <div>
                 <List
@@ -38,7 +40,7 @@ class IndicadoresList extends Component {
 
 const mapStateToProps = (state) => ({
     grupo: state.indicadores.grupo,
-    grupos: state.indicadores.data.grupos,
+    grupos: state.indicadores.grupos,
     atributo: state.indicadores.atributo,
 });
 export default connect(mapStateToProps, { selectIndicador })(IndicadoresList);

@@ -9,12 +9,11 @@ import {
 } from "../../redux/actions/indicadoresActions";
 
 /**
- * Constroi os DropDown para selecionar o Grupo e Atributo 
+ * Constroi os DropDown para selecionar o Grupo e Atributo
  * para ver a lista de Indicadores
  */
 class GrupoAtributo extends Component {
-    
-    componentDidMount(){
+    componentDidMount() {
         this.props.fetchIndicadores();
     }
 
@@ -33,7 +32,7 @@ class GrupoAtributo extends Component {
                 <Col>
                     <Select
                         title="Grupo"
-                        items={this.props.data.grupos.map(x=>x.nome)}
+                        items={this.props.grupos?.map((x) => x.nome)}
                         onSelect={this.handleGrupo}
                         value={this.props.grupo}
                     />
@@ -41,7 +40,9 @@ class GrupoAtributo extends Component {
                 <Col>
                     <Select
                         title="Atributos"
-                        items={this.props.data.grupos[this.props.grupo].atributos.map(x=>x.nome)}
+                        items={this.props?.grupos[
+                            this.props.grupo
+                        ].atributos.map((x) => x.nome)}
                         onSelect={this.handleAtributo}
                         value={this.props.atributo}
                     />
@@ -51,7 +52,7 @@ class GrupoAtributo extends Component {
     }
 }
 const mapStateToProps = (state) => ({
-    data: state.indicadores.data,
+    grupos: state.indicadores.grupos,
     grupo: state.indicadores.grupo,
     atributo: state.indicadores.atributo,
 });

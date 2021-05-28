@@ -6,8 +6,8 @@
  * seja visualizado como um unico indicador com varios valores atrelados
  * -Celente
  */
-import React, { Component} from "react";
-import { Bar,Line } from "react-chartjs-2";
+import React, { Component } from "react";
+import { Bar, Line } from "react-chartjs-2";
 import { connect } from "react-redux";
 import { fetchPropriedades } from "../../redux/actions/propriedadesActions";
 import { fetchSerieHist } from "../../redux/actions/indicadoresActions";
@@ -50,7 +50,7 @@ const options = {
         display: true,
         position: "bottom",
     },
-    mode: 'index',
+    mode: "index",
     responsive: true,
 };
 
@@ -126,9 +126,9 @@ class SimpleBar extends Component {
         let data = base;
         const { graficos } = this.props;
 
-        // parte da options inicial 
+        // parte da options inicial
         let option = options;
-        // encontra nos dados vindos do banco (graficos), 
+        // encontra nos dados vindos do banco (graficos),
         // o indicador com o nome do selecionado (selected.indicador)
         const { nome } = this.props.selected.indicador;
         const result = Object.entries(graficos).find((a) => a[0] === nome);
@@ -146,7 +146,6 @@ class SimpleBar extends Component {
             if (a.tempo !== b.tempo) return a.tempo > b.tempo;
             else return a.propriedade > b.propriedade;
         });
-
         let datasets = [];
         let labels = [];
 
@@ -164,8 +163,8 @@ class SimpleBar extends Component {
 
             datasets[dset].data.push(valor);
         });
-        
-        // Transforma os dados que contem multiplos valores (indicadores cujos 
+
+        // Transforma os dados que contem multiplos valores (indicadores cujos
         // dados são objetos), em multiplas entradas (variantes) em um objeto
         // [ "indicador (variante): dados"]
         let singleDataByPropriedade = {};
@@ -179,12 +178,14 @@ class SimpleBar extends Component {
                     // "Indicador  (Variante)", eg: Producao (Animal) e Producao (Vegetal)"
                     Object.entries(point).forEach((val, k) => {
                         let t = prop.label + " (" + val[0] + ")";
-                        if (!singleDataByPropriedade[t]) singleDataByPropriedade[t] = [];
+                        if (!singleDataByPropriedade[t])
+                            singleDataByPropriedade[t] = [];
                         singleDataByPropriedade[t].push(val[1]);
                     });
                 } else {
                     // Caso não tenha variantes usa "Indicador": dados
-                    if (!singleDataByPropriedade[prop.label]) singleDataByPropriedade[prop.label] = [];
+                    if (!singleDataByPropriedade[prop.label])
+                        singleDataByPropriedade[prop.label] = [];
                     singleDataByPropriedade[prop.label] = prop.data;
                 }
             });
@@ -202,7 +203,7 @@ class SimpleBar extends Component {
                     <Dropdown.Item eventKey="0">Barras</Dropdown.Item>
                     <Dropdown.Item eventKey="1">Linha</Dropdown.Item>
                 </Dropdown>
-                <Bar className="left-column" data={data}  options={option} />
+                <Bar className="left-column" data={data} options={option} />
             </Col>
         );
     }
@@ -210,7 +211,7 @@ class SimpleBar extends Component {
 
 const mapStateToProps = (state) => ({
     graficos: state.indicadores.graficos,
-    selected: state.indicadores.selectedIndicador, 
+    selected: state.indicadores.selectedIndicador,
 });
 
 export default connect(mapStateToProps, { fetchPropriedades, fetchSerieHist })(
