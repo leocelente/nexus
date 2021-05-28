@@ -14,7 +14,7 @@ import img_eesc from "./images/eesc-horizontal.png";
 import img_cnpq from "./images/cnpq.png";
 
 function App() {
-    const [key, setKey] = useState("home");
+    const [aba, setAba] = useState("home");
 
     return (
         <div className="App">
@@ -24,12 +24,8 @@ function App() {
                         <h2 style={{ color: "white" }}>PLA.CO.P.A.S</h2>
                     </>
                 </Navbar.Brand>
-                {/* <Navbar.Brand>
-                </Navbar.Brand> */}
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="mr-auto "> {/* mx-auto */}
-                        {/* <Nav.Link href="#aboutus">Sobre Nós</Nav.Link> */}
-                        {/* <Navbar.Text>Plataforma de </Navbar.Text> */}
                         <h2 className="d-none d-sm-block" style={{ color: "white", /** marginLeft:'3.3rem' */ }}>
                             Plataforma Cooperativa de Práticas Agrícolas Sustentaveis
                         </h2>
@@ -41,12 +37,11 @@ function App() {
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
-            {/* <ProgressBar now={75} label={`${75}%`} variant="success" /> */}
             <Tabs
                 id="main-pages-tabs"
                 fg="dark"
-                activeKey={key}
-                onSelect={(k) => setKey(k)}
+                activeKey={aba}
+                onSelect={(k) => setAba(k)}
             >
                 <Tab eventKey="home" title="Pagina Inicial">
                     <PaginaInicial />
