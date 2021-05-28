@@ -7,36 +7,45 @@ import SimpleBar from "../components/charts/SimpleBar";
 import VariantBar from "../components/charts/VariantBar";
 
 /**
- * Pagina dos Indicadores, duas colunas uma com os graficos e outra com 
- * as opções para selecionar o Grupo e Atributo dentro do GRupo e finalmente o 
+ * Pagina dos Indicadores, duas colunas uma com os graficos e outra com
+ * as opções para selecionar o Grupo e Atributo dentro do GRupo e finalmente o
  * Indicador numa lista
  */
 export default class Indicadores extends Component {
-  render() {
-    return (
-      <div>
-        <PageBase
-          left={<SimpleBar />}
-          extra ={<VariantBar />}
-          right={
+    render() {
+        return (
             <div>
-              <Card>
-                <Card.Title>
-                  <h4>Primeiro Passo</h4>
-                </Card.Title>
-                <Card.Text style={{ color: "black" }}>
-                Acesse indicadores NEXUS para fazer comparações entre diferentes propriedades
-                </Card.Text>
-              </Card>
-              <br></br>
-              <GrupoAtributo />
-              <br></br>            
-              {/* <List items={indicadores} title="Indicadores" /> */}
-              <IndicadoresList />
+                <PageBase
+                    left={
+                        <SimpleBar
+                            orderBy={(a, b) => {
+                                if (a.tempo !== b.tempo)
+                                    return a.tempo > b.tempo;
+                                else return a.propriedade > b.propriedade;
+                            }}
+                        />
+                    }
+                    // extra={<VariantBar />}
+                    right={
+                        <div>
+                            <Card>
+                                <Card.Title>
+                                    <h4>Primeiro Passo</h4>
+                                </Card.Title>
+                                <Card.Text style={{ color: "black" }}>
+                                    Acesse indicadores NEXUS para fazer
+                                    comparações entre diferentes propriedades
+                                </Card.Text>
+                            </Card>
+                            <br></br>
+                            <GrupoAtributo />
+                            <br></br>
+                            {/* <List items={indicadores} title="Indicadores" /> */}
+                            <IndicadoresList />
+                        </div>
+                    }
+                />
             </div>
-          }
-        />
-      </div>
-    );
-  }
+        );
+    }
 }
