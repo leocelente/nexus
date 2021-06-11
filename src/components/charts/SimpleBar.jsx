@@ -14,6 +14,7 @@ import { fetchSerieHist } from "../../redux/actions/indicadoresActions";
 import pattern from "patternomaly"; // Biblioteca para gerar padrões (quadradinhos)
 // no grafico para criar um destaque
 import { Col, Row, Dropdown, ButtonGroup } from "react-bootstrap";
+import Graph from "../general/Graph";
 
 /* Padroniza as cores vistas. Ainda não funciona corretamente
     devido as multiplas renderizações do react.
@@ -146,8 +147,18 @@ class SimpleBar extends Component {
             if (a.tempo !== b.tempo) return a.tempo > b.tempo;
             else return a.propriedade > b.propriedade;
         });
+
         let datasets = [];
         let labels = [];
+
+        // Constroi o array com o eixo x, isso é importante
+        // pois o valor de Y deve ser injetado no index especifico
+        // para correlacionar com o eixo X
+        series.forEach(({ tempo }) => {
+            if (!labels.includes(tempo)) {
+                labels.push(tempo);
+            }
+        });
 
         // constroi 'datasets' que contem os data(eixo y) e os labels(eixo x)
         // para o grafico
@@ -156,14 +167,10 @@ class SimpleBar extends Component {
             if (dset === -1) {
                 datasets.push({ label: propriedade, data: [] });
                 dset = datasets.length - 1;
+                labels.forEach((_, i) => (datasets[dset].data[i] = 0));
             }
-            if (!labels.includes(tempo)) {
-                labels.push(tempo);
-            }
-
-            datasets[dset].data.push(valor);
+            datasets[dset].data[labels.indexOf(tempo)] = valor;
         });
-
         // Transforma os dados que contem multiplos valores (indicadores cujos
         // dados são objetos), em multiplas entradas (variantes) em um objeto
         // [ "indicador (variante): dados"]
@@ -205,6 +212,7 @@ class SimpleBar extends Component {
                 </Dropdown>
                 <Bar className="left-column" data={data} options={option} />
             </Col>
+            // <Graph data={data} option={option} />
         );
     }
 }
