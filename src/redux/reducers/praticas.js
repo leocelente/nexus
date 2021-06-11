@@ -5,9 +5,7 @@ import { SELECT_TEMA, FETCH_PRATICAS, SELECT_PRATICA } from "../actions";
 const initialState = {
     selectedIndicadores: [],
     selectedTema: 0,
-    pratica: {
-        propriedades: [new Propriedade({})],
-    },
+    pratica: new Pratica({}),
     temas: [
         {
             praticas: [new Pratica({})],

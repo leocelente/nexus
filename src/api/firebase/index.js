@@ -112,7 +112,15 @@ export async function fetchPropriedadesFirebase(dispatch) {
     let propriedades = [];
     const snap = await Helpers.getCollection(db, "propriedades");
     await Helpers.asyncForEach(snap, async (propriedade, i) => {
-        propriedades[i] = new Propriedade(propriedade.data());
+        let data = { ...propriedade.data(), praticas: [] };
+        let praticas = await Helpers.getCollection(propriedade.ref, "praticas");
+
+        await Helpers.asyncForEach(praticas, async (pratica, i) => {
+            data.praticas[i] = await Helpers.followReference(
+                pratica.data().pratica
+            );
+        });
+        propriedades[i] = new Propriedade(data);
     });
 
     dispatch({
