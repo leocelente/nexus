@@ -3,7 +3,7 @@ import { Card, Row } from "react-bootstrap";
 import PageBase from "../components/general/PageBase";
 import PraticasList from "../components/praticas/PraticasList";
 import SelectTema from "../components/praticas/SelectTema";
-// import SimpleRadar from "../components/charts/SimpleRadar";
+import SimpleRadar from "../components/charts/_SimpleRadar";
 import PropertyBar from "../components/benchmark/PropertyBar";
 /**
  * Página de benchmark está menos definida, em teoria mostraria o
@@ -17,7 +17,7 @@ export default class Benchmark extends Component {
                 <PageBase
                     left={
                         <>
-                            {/* <SimpleRadar /> */}
+                            <SimpleRadar />
                             <Card>
                                 <span style={{ color: "#2e2e2e" }}>
                                     Dica: Cique nos items na legenda para
@@ -25,10 +25,9 @@ export default class Benchmark extends Component {
                                 </span>
                             </Card>
                             {/* Testes */}
-                            <PropertyBar nome="Propriedade" valor={0.75} />
+                            {/* <PropertyBar nome="Propriedade" valor={0.75} />
                             <PropertyBar nome="Propriedade" valor={0.25} />
-                            <PropertyBar nome="Propriedade" valor={0.5} />
-
+                            <PropertyBar nome="Propriedade" valor={0.5} /> */}
                         </>
                     }
                     right={

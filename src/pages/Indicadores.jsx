@@ -16,16 +16,8 @@ export default class Indicadores extends Component {
         return (
             <div>
                 <PageBase
-                    left={
-                        <SimpleBar
-                            orderBy={(a, b) => {
-                                if (a.tempo !== b.tempo)
-                                    return a.tempo > b.tempo;
-                                else return a.propriedade > b.propriedade;
-                            }}
-                        />
-                    }
-                    // extra={<VariantBar />}
+                    left={<SimpleBar />}
+                    extra={<VariantBar />}
                     right={
                         <div>
                             <Card>

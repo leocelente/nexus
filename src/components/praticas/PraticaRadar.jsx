@@ -53,10 +53,14 @@ export default class PraticaRadar extends Component {
     };
 
     render() {
-        console.log(this.props.pratica);
+        if (this.props.pratica.nome === "") {
+            return <div></div>;
+        }
         let data = base;
         const { agua, alimento, energia } = this.props.pratica.benchmark;
-        data.datasets = [makeDataset(this.props.pratica.nome, [agua, alimento, energia], 0)];
+        data.datasets = [
+            makeDataset(this.props.pratica.nome, [agua, alimento, energia], 0),
+        ];
         return <Radar data={data} options={options} />;
     }
 }

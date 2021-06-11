@@ -11,9 +11,9 @@ import "../../css/marker.css";
 import { Table } from "react-bootstrap";
 
 /**
- * 
+ *
  * @param {} paremetros
- * O count é o numero do pino e o nome é o texto que aparece no hover 
+ * O count é o numero do pino e o nome é o texto que aparece no hover
  * @returns componente com estilo de marcador
  */
 const Marker = ({ count, nome }) => (
@@ -33,21 +33,26 @@ class SimpleMap extends Component {
     };
 
     render() {
-        const propriedades = this.props.pratica.propriedades;
-        // constroi um marcador para cada propriedade 
+        const propriedades = [this.props.selected];
+        // constroi um marcador para cada propriedade
         // note que essa propriedades estão dentro da pratica
         // é o subconjunto de propriedades que fazem uso da pratica
-        const pos = propriedades.map((p) => (
+        const pos = propriedades.map((p, i) => (
             <Marker
                 lat={p.gps.latitude}
                 lng={p.gps.longitude}
                 nome={p.nome}
-                count={propriedades.indexOf(p) + 1}
+                count={i + 1}
             />
         ));
         return (
-            <>
-                <div style={{ height: "70vh", width: "100%" }}>
+            <div
+                style={{
+                    backgroundColor: "white",
+                    border: "1px solid lightgray",
+                }}
+            >
+                <div style={{ height: "40vh", width: "100%" }}>
                     <GoogleMapReact
                         bootstrapURLKeys={{ key: process.env.REACT_APP_API }}
                         defaultCenter={this.props.center}
@@ -57,7 +62,7 @@ class SimpleMap extends Component {
                     </GoogleMapReact>
                 </div>
                 <hr />
-                <h3>Legenda:</h3> 
+                {/* <h3>Legenda:</h3> */}
                 {/* Tabela contendo uma legenda ligando index de pontos e as
                 propriedades que eles representam */}
                 <div style={{ color: "black" }}>
@@ -83,13 +88,13 @@ class SimpleMap extends Component {
                         </tbody>
                     </Table>
                 </div>
-            </>
+            </div>
         );
     }
 }
 
 const mapStateToProps = (state) => ({
-    pratica: state.praticas.pratica,
+    selected: state.propriedades.propriedade,
 });
 
 export default connect(mapStateToProps, null)(SimpleMap);

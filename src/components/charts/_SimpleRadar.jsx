@@ -1,12 +1,13 @@
 /**
  * Componente "depreciado" iria ser usado para mostrar a pontuação
- * de todas as praticas de um tema de acordo com os eixos do nexus 
+ * de todas as praticas de um tema de acordo com os eixos do nexus
  * (agua, alimento, energia) mas está sendo pensada uma outra visualização
  */
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
 import { Radar } from "react-chartjs-2";
 import { connect } from "react-redux";
+import PropertyBar from "../benchmark/PropertyBar";
 import TableJson from "../general/TableJson";
 
 const colors = [
@@ -18,7 +19,7 @@ const colors = [
     "rgba(255, 159, 64, 0.5)",
 ];
 
-// Cria um dataset para a biblioteca ChartJs com o 
+// Cria um dataset para a biblioteca ChartJs com o
 // nome label e dados data, o index é utilizado para selecionar
 // uma cor dos valores acima
 function makeDataset(label, data, index) {
@@ -58,7 +59,7 @@ const options = {
 
 class SimpleRadar extends Component {
     render() {
-        // lembrando que os indicadores são 
+        // lembrando que os indicadores são
         // organizados em grupos->atributos->indicadores
         const { grupos, graficos } = this.props;
         if (graficos === undefined) return <></>;
@@ -82,9 +83,9 @@ class SimpleRadar extends Component {
             tabela[kv_i[0]] = [];
             let prop_kv = Array.from(Object.entries(kv_i[1].byProp));
             prop_kv.forEach((kv_p) => {
-                tabela[kv_i[0]][kv_p[0]] = kv_i[1].byProp[
-                    kv_p[0]
-                ].map(({ norm, tempo }) => ({ norm, tempo }));
+                tabela[kv_i[0]][kv_p[0]] = kv_i[1].byProp[kv_p[0]].map(
+                    ({ norm, tempo }) => ({ norm, tempo })
+                );
             });
         });
 
@@ -103,6 +104,10 @@ class SimpleRadar extends Component {
                                         <span>
                                             {x.tempo}:{" "}
                                             <u>{x.norm.toFixed(4)}</u>
+                                            {/* <PropertyBar
+                                                nome={x.tempo}
+                                                valor={x.norm.toFixed(4)}
+                                            /> */}
                                         </span>
                                     </>
                                 ))}
@@ -132,7 +137,7 @@ class SimpleRadar extends Component {
 const mapStateToProps = (state) => ({
     graficos: state.indicadores.graficos,
     data: state.praticas.data,
-    grupos: state.indicadores.data.grupos,
+    grupos: state.indicadores.grupos,
     selectedTema: state.praticas.selectedTema,
 });
 
