@@ -95,6 +95,24 @@ export async function fetchPraticasFirebase(dispatch) {
                     );
                 }
             );
+
+            const indicadores = await Helpers.getCollection(
+                pratica.ref,
+                "indicadores"
+            );
+
+            await Helpers.asyncForEach(
+                indicadores,
+                async (indicador_ref, k) => {
+                    let indicador = await Helpers.followReference(
+                        indicador_ref.data().indicador
+                    );
+
+                    temas[i].praticas[j].indicadores.push(
+                        new Indicador(indicador)
+                    );
+                }
+            );
         });
     });
 
