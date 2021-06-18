@@ -36,7 +36,7 @@ class UsedPraticas extends Component {
                     items={praticas.map((x) => x.nome)}
                     onSelect={(i) => this.handle(praticas[i], i)}
                 />
-                {/* <PraticaRadar pratica={this.props.pratica} /> */}
+                <PraticaRadar pratica={this.props.pratica} />
                 <hr></hr>
                 <br></br>
                 <TableJson data={pratica.descricao} />
