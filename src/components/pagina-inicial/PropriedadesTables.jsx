@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { fetchPropriedades } from "../../redux/actions/propriedadesActions";
 
 /**
- * Mostra as informações de uma propriedade na forma de um 
+ * Mostra as informações de uma propriedade na forma de um
  * pop-up com um tabela (TableJson)
  */
 function ItemCollapsable(props) {
@@ -55,7 +55,7 @@ class PropriedadesTables extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    data: state.propriedades.data,
+    data: state.propriedades,
 });
 
 export default connect(mapStateToProps, { fetchPropriedades })(
