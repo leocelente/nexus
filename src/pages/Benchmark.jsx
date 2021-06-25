@@ -5,6 +5,7 @@ import PraticasList from "../components/praticas/PraticasList";
 import SelectTema from "../components/praticas/SelectTema";
 import SimpleRadar from "../components/charts/_SimpleRadar";
 import PropertyBar from "../components/benchmark/PropertyBar";
+import AllPraticasList from "../components/benchmark/AllPraticasList";
 /**
  * Página de benchmark está menos definida, em teoria mostraria o
  * grafico de como praticas se relacionam com indicadores [normalizados]. Mas
@@ -42,9 +43,9 @@ export default class Benchmark extends Component {
                                 </Card.Text>
                             </Card>
                             <br></br>
-                            <SelectTema />
+                            {/* <SelectTema /> */}
                             <br></br>
-                            <PraticasList />
+                            <AllPraticasList />
                             {/*<IndicadoresList /> */}
                         </>
                     }
