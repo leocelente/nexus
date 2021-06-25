@@ -42,7 +42,7 @@ const base = {
 
 const options = {
     scale: {
-        ticks: { beginAtZero: true, suggestedMax: 10 },
+        ticks: { beginAtZero: true, suggestedMax: 1 },
         gridLines: {
             color: "rgba(0, 0, 0, 0.36)",
         },
@@ -61,6 +61,13 @@ const options = {
 };
 
 class SimpleRadar extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { year: new Date().getFullYear() - 1 };
+    }
+    setYear(/** @type {Number} */ year) {
+        this.setState({ year });
+    }
     render() {
         // lembrando que os indicadores são
         // organizados em grupos->atributos->indicadores
@@ -68,7 +75,7 @@ class SimpleRadar extends Component {
 
         /** @type {Pratica} */
         const selected = this.props.selected;
-
+        console.log(selected);
         /** @type {Array<Propriedade>} */
         const propriedades_all = this.props.propriedades;
 
@@ -77,68 +84,63 @@ class SimpleRadar extends Component {
             const ns = prop.praticas.map((x) => x.nome);
             return ns.includes(selected.nome);
         });
-
+        console.log(propriedades);
         const nomes = propriedades.map((x) => x.nome);
 
         if (graficos === undefined) return <></>;
+        // if (selected.indicadores === undefined) return <></>;
+        let avgs_ind = {};
+        let avgs_att = {};
+        let avgr = (/** @type {Array<Number>} */ xs) =>
+            xs.length === 0 ? 0 : xs.reduce((a, x) => a + x, 0) / xs.length;
+        // console.log(graficos);
         // inclui todos os indicadores
-        grupos.forEach((indicador) => {
-            indicador.atributos.forEach((atributo) => {
-                // TODO: como é possivel isso ser undefined?
-                if (selected.indicadores === undefined) return <></>;
-                atributo.indicadores.forEach(({ nome }) => {
-                    if (graficos[nome] === undefined) return;
-                    const { byProp, min, max } = graficos[nome];
-                    Array.from(
-                        // filtra `byProp` do indicador pela variavel `propriedades`
-                        Object.entries(byProp).filter((prop) =>
-                            nomes.includes(prop[0])
-                        )
-                    ).forEach((kv) => {
-                        // faz a normalização
-                        byProp[kv[0]].forEach(({ valor }, i, a) => {
-                            a[i].norm = (valor - min) / (max - min);
-                        });
-                    });
-                });
-            });
-        });
-
         grupos.forEach((/** @type {Grupo} */ grupo) => {
-            let media_grupo = {};
             grupo.atributos.forEach((/** @type {Atributo} */ atributo) => {
                 // TODO: como é possivel isso ser undefined?
-                if (selected.indicadores === undefined) return <></>;
-                let media_atributo = {};
                 atributo.indicadores.forEach(
                     (/** @type {Indicador} */ { nome }) => {
                         if (graficos[nome] === undefined) return;
-                        Object.entries(graficos[nome].byProp)
-                            .filter((prop) => nomes.includes(prop[0]))
-                            .forEach((prop) => {
-                                /** @type {Array} */
-                                const data = prop[1];
-                                // console.log(data);
-                                media_atributo[prop[0]] = data.reduce(
-                                    (acc, x) => acc + x.norm,
-                                    0
-                                );
+                        const { byProp, min, max } = graficos[nome];
+                        Array.from(
+                            // filtra `byProp` do indicador pela variavel `propriedades`
+                            Object.entries(byProp).filter((prop) =>
+                                nomes.includes(prop[0])
+                            )
+                        ).forEach((kv) => {
+                            // faz a normalização
+                            byProp[kv[0]].forEach(({ valor }, i, a) => {
+                                if (Object.entries(valor).length > 1) {
+                                    valor = avgr(
+                                        Object.entries(valor).map((x) => x[1])
+                                    );
+                                }
+                                a[i].norm = (valor - min) / (max - min);
                             });
-                        // console.log(nome);
+                        });
+
+                        let norms = Object.entries(byProp)
+                            .filter((prop) => nomes.includes(prop[0]))
+                            .map((x) => x[1][0])
+                            .map((x) => x.norm);
+                        avgs_ind[nome] = avgr(norms);
                     }
                 );
-                // console.log("media_atributo", atributo.nome, media_atributo);
-                Object.entries(media_atributo).forEach((avg_att) => {
-                    if (!Number.isNaN(avg_att[1]))
-                        media_grupo[avg_att[0]] += avg_att[1];
-                });
-                Object.entries(media_atributo).forEach((avg_att) => {
-                    media_grupo[avg_att[0]] /= grupo.atributos.length;
-                });
+                let i_nomes = atributo.indicadores.map((x) => x.nome);
+                let a = Object.entries(avgs_ind)
+                    .filter((ind) => i_nomes.includes(ind[0]))
+                    .map((x) => x[1]);
+                avgs_att[atributo.nome] = avgr(a);
             });
-            // console.log("media_grupo", grupo.nome, media_grupo);
         });
-
+        /// build radar
+        let ys = Object.entries(avgs_att).map((x) => x[1]);
+        let labels = Object.entries(avgs_att).map((x) => x[0]);
+        let dataset = makeDataset("Benchmarks", ys, 0);
+        let data = {
+            labels,
+            datasets: [dataset],
+        };
         //
         // constroi a tabela com indicadores normalizados
         // por propriedade (filtrada) e ano
@@ -157,6 +159,7 @@ class SimpleRadar extends Component {
 
         return (
             <>
+                <Radar data={data} options={options} />
                 {Object.entries(tabela).map((kv) => {
                     const props = Object.entries(kv[1]);
                     const ele = props.map((kv_) => {
