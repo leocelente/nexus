@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Radar } from "react-chartjs-2";
+import { Pratica } from "../../api/models/pratica";
 
 const colors = [
     "rgba(255, 99, 132, 0.5)",
@@ -57,7 +58,9 @@ export default class PraticaRadar extends Component {
             return <div></div>;
         }
         let data = base;
-        const { agua, alimento, energia } = this.props.pratica.benchmark;
+        /** @type {Pratica} */
+        let pratica = this.props.pratica;
+        const { agua, alimento, energia } = pratica.benchmark;
         data.datasets = [
             makeDataset(this.props.pratica.nome, [agua, alimento, energia], 0),
         ];
