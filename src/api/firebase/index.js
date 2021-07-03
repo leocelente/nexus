@@ -134,7 +134,8 @@ export async function fetchPropriedadesFirebase(dispatch) {
         let praticas = await Helpers.getCollection(propriedade.ref, "praticas");
 
         await Helpers.asyncForEach(praticas, async (pratica, i) => {
-            data.praticas[i] = await Helpers.followReference(
+            data.praticas[i] = pratica.data();
+            data.praticas[i].pratica = await Helpers.followReference(
                 pratica.data().pratica
             );
         });
@@ -159,8 +160,8 @@ async function getSerieHistoricaRaw() {
     const indicadores = await Helpers.getCollection(db, "serie_historica");
     await Helpers.asyncForEach(indicadores, async (indicador, i) => {
         dados[i] = indicadores[i].data();
-        dados[i].indicador = await Helpers.followReference(dados[i].indicador); //(await dados[i].indicador.get()).data();
-        dados[i].data = [{ indicador: { nome: "" } }];
+        dados[i].indicador = await Helpers.followReference(dados[i].indicador);
+        dados[i].data = [{ indicador: new Indicador({}) }];
         const data = await Helpers.getCollection(indicador.ref, "data");
         await Helpers.asyncForEach(data, async (ponto, j) => {
             dados[i].data[j] = ponto.data();
@@ -192,7 +193,7 @@ function orderRawSerieHistorica(dados) {
             max: -1e12,
         };
 
-        data.forEach(({ valor, tempo, propriedade }) => {
+        data.forEach(({ valor, tempo, propriedade, praticas }) => {
             // por indicador
             graficos[nome].series.push({
                 valor,
@@ -203,7 +204,11 @@ function orderRawSerieHistorica(dados) {
             if (!graficos[nome].byProp[propriedade.nome]) {
                 graficos[nome].byProp[propriedade.nome] = [];
             }
-            graficos[nome].byProp[propriedade.nome].push({ valor, tempo });
+            graficos[nome].byProp[propriedade.nome].push({
+                valor,
+                tempo,
+                propriedade,
+            });
 
             if (Object.entries(valor).length != 0) {
                 let kvs = Object.entries(valor);
