@@ -75,24 +75,35 @@ class SimpleRadar extends Component {
 
         /** @type {Pratica} */
         const selected = this.props.selected;
-        console.log(selected);
         /** @type {Array<Propriedade>} */
         const propriedades_all = this.props.propriedades;
+        // console.log("selected", selected);
+        let avgr = (/** @type {Array<Number>} */ xs) =>
+            xs.length === 0 ? 0 : xs.reduce((a, x) => a + x, 0) / xs.length;
 
         // Propriedades que aplicam a pratica 'selected'
         const propriedades = propriedades_all.filter((prop) => {
-            const ns = prop.praticas.map((x) => x.nome);
+            const ns = prop.praticas.map((x) => x.pratica.nome);
             return ns.includes(selected.nome);
         });
-        console.log(propriedades);
+
+        let valid_years = {};
+        Object.entries(propriedades).forEach((kv) => {
+            const ps = kv[1]?.praticas;
+            valid_years[kv[1].nome] = {};
+            Object.entries(ps).forEach((p) => {
+                if (p[1].tempos !== undefined)
+                    valid_years[kv[1].nome][p[1].pratica.nome] = p[1].tempos;
+                else valid_years[kv[1].nome][p[1].pratica.nome] = [];
+            });
+        });
+        console.log(valid_years);
         const nomes = propriedades.map((x) => x.nome);
 
         if (graficos === undefined) return <></>;
         // if (selected.indicadores === undefined) return <></>;
         let avgs_ind = {};
         let avgs_att = {};
-        let avgr = (/** @type {Array<Number>} */ xs) =>
-            xs.length === 0 ? 0 : xs.reduce((a, x) => a + x, 0) / xs.length;
         // console.log(graficos);
         // inclui todos os indicadores
         grupos.forEach((/** @type {Grupo} */ grupo) => {
@@ -107,20 +118,35 @@ class SimpleRadar extends Component {
                             Object.entries(byProp).filter((prop) =>
                                 nomes.includes(prop[0])
                             )
-                        ).forEach((kv) => {
+                        ).forEach((kv, i, a) => {
                             // faz a normalização
-                            byProp[kv[0]].forEach(({ valor }, i, a) => {
-                                if (Object.entries(valor).length > 1) {
-                                    valor = avgr(
-                                        Object.entries(valor).map((x) => x[1])
-                                    );
-                                }
-                                a[i].norm = (valor - min) / (max - min);
-                            });
+                            const used_years =
+                                valid_years[kv[0]][selected.nome];
+                            byProp[kv[0]]
+                                .filter(({ tempo }) =>
+                                    used_years.includes(tempo)
+                                )
+                                .forEach(({ valor }, i, a) => {
+                                    if (Object.entries(valor).length > 1) {
+                                        valor = avgr(
+                                            Object.entries(valor).map(
+                                                (x) => x[1]
+                                            )
+                                        );
+                                    }
+                                    a[i].norm = (valor - min) / (max - min);
+                                    // a[i].norm = Math.max(a[i].norm, valor);
+                                });
                         });
 
                         let norms = Object.entries(byProp)
                             .filter((prop) => nomes.includes(prop[0]))
+                            .filter((kv) => {
+                                console.log(kv);
+                                return valid_years[kv[0]][
+                                    selected.nome
+                                ].includes(kv[1][0].tempo);
+                            })
                             .map((x) => x[1][0])
                             .map((x) => x.norm);
                         avgs_ind[nome] = avgr(norms);
