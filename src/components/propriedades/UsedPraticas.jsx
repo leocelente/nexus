@@ -33,8 +33,8 @@ class UsedPraticas extends Component {
             <>
                 <List
                     title="Praticas Aplicadas"
-                    items={praticas.map((x) => x.nome)}
-                    onSelect={(i) => this.handle(praticas[i], i)}
+                    items={praticas.map((x) => x.pratica.nome)}
+                    onSelect={(i) => this.handle(praticas[i].pratica, i)}
                 />
                 <PraticaRadar pratica={this.props.pratica} />
                 <hr></hr>

@@ -36,14 +36,20 @@ class AllPraticasList extends Component {
     };
 
     render() {
-        let nomes = this.props.propriedades
-            .map((x) => x.praticas)
-            .map((x) => x[0])
-            .map((x) => x.nome);
-        let praticas = this.props.propriedades
-            .map((x) => x.praticas)
-            .map((x) => x[0])
-            .filter((v, i, s) => nomes.indexOf(v.nome) === i);
+        const a_nomes = this.props.propriedades
+            .map((propriedade) => propriedade.praticas)
+            .filter((list_praticas) => list_praticas.length > 0);
+        const nomes = [].concat.apply([], a_nomes).map((z) => z.pratica.nome);
+
+        /**@type {Array<Array<any>>} */
+        const a_praticas = this.props.propriedades
+            .map((propriedade) => propriedade.praticas)
+            .filter((list_praticas) => list_praticas.length > 0);
+        const praticas = [].concat
+            .apply([], a_praticas)
+            .filter((v, i, s) => nomes.indexOf(v.pratica.nome) === i); // unique
+
+        console.log(praticas);
         if (praticas[0] === undefined) return <></>;
         return (
             <div>
@@ -75,10 +81,12 @@ class AllPraticasList extends Component {
                 </Modal>
 
                 <List
-                    items={praticas.map((x) => x.nome)}
+                    items={praticas.map((x) => x.pratica.nome)}
                     title="Praticas"
-                    onSelect={(p) => this.handler(praticas[p])}
-                    onSaibaMais={(idx) => this.handleShow(praticas[idx])}
+                    onSelect={(p) => this.handler(praticas[p].pratica)}
+                    onSaibaMais={(idx) =>
+                        this.handleShow(praticas[idx].pratica)
+                    }
                 />
             </div>
         );
@@ -88,4 +96,5 @@ class AllPraticasList extends Component {
 const mapStateToProps = (state) => ({
     propriedades: state.propriedades.propriedades,
 });
+
 export default connect(mapStateToProps, { selectPratica })(AllPraticasList);
