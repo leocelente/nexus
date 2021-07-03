@@ -97,7 +97,7 @@ class SimpleRadar extends Component {
                 else valid_years[kv[1].nome][p[1].pratica.nome] = [];
             });
         });
-        console.log(valid_years);
+
         const nomes = propriedades.map((x) => x.nome);
 
         if (graficos === undefined) return <></>;
@@ -135,7 +135,6 @@ class SimpleRadar extends Component {
                                         );
                                     }
                                     a[i].norm = (valor - min) / (max - min);
-                                    // a[i].norm = Math.max(a[i].norm, valor);
                                 });
                         });
 
@@ -156,7 +155,7 @@ class SimpleRadar extends Component {
                 let a = Object.entries(avgs_ind)
                     .filter((ind) => i_nomes.includes(ind[0]))
                     .map((x) => x[1]);
-                avgs_att[atributo.nome] = avgr(a);
+                avgs_att[atributo.nome] = Math.max(...a);
             });
         });
         /// build radar
