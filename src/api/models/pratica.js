@@ -8,12 +8,14 @@ export class Pratica {
 
     // TODO: remover dependencia desses membro:
     b_atributos = [];
-    benchmark = {};
+    benchmark = { agua: 0, alimento: 0, energia: 0 };
 
     constructor(data) {
         this.nome = data?.nome ? data.nome : "";
-        this.descricao = data?.descricao ? data.descricao : {};
-        this.benchmark = data?.benchmark ? data.benchmark : {};
+        this.descricao = data?.descricao ? data.descricao : { "": "" };
+        this.benchmark = data?.benchmark
+            ? data.benchmark
+            : { agua: 0, alimento: 0, energia: 0 };
         this.indicadores = data?.indicadores ? data.indicadores : [];
         this.propriedades = [];
         this.b_atributos = [];
