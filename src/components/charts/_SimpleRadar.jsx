@@ -185,7 +185,7 @@ class SimpleRadar extends Component {
         return (
             <>
                 <Radar data={data} options={options} />
-                {Object.entries(tabela).map((kv) => {
+                {/* {Object.entries(tabela).map((kv) => {
                     const props = Object.entries(kv[1]);
                     const ele = props.map((kv_) => {
                         const points = kv_[1].sort((a, b) => a.tempo < b.tempo);
@@ -201,7 +201,7 @@ class SimpleRadar extends Component {
                                             {/* <PropertyBar
                                                 nome={x.tempo}
                                                 valor={x.norm.toFixed(4)}
-                                            /> */}
+                                            /> }
                                         </span>
                                     </>
                                 ))}
@@ -216,7 +216,7 @@ class SimpleRadar extends Component {
                             {ele}
                         </Card>
                     );
-                })}
+                })} */}
             </>
         );
     }
