@@ -9,11 +9,13 @@ import { selectPratica } from "../../redux/actions/praticasActions";
 import TableJson from "../general/TableJson";
 
 class UsedPraticas extends Component {
-    static propTypes = {
-        selected: Propriedade,
-    };
-
     handle = (pratica, i) => {
+        if (this.props.selected?.praticas[i].tempos !== undefined) {
+            /** @type {Array<Number>} */
+            const tempos = this.props.selected?.praticas[i].tempos.sort();
+            const txt = tempos.join(", ");
+            pratica.descricao["Utilização"] = txt;
+        }
         this.props.selectPratica(pratica);
     };
 
@@ -28,7 +30,7 @@ class UsedPraticas extends Component {
         }
         /** @type {Pratica} */
         const pratica = this.props.pratica;
-
+        console.log(pratica);
         return (
             <>
                 <List
