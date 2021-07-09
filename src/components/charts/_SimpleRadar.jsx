@@ -99,7 +99,6 @@ class SimpleRadar extends Component {
         });
 
         const nomes = propriedades.map((x) => x.nome);
-
         if (graficos === undefined) return <></>;
         // if (selected.indicadores === undefined) return <></>;
         let avgs_ind = {};
@@ -142,14 +141,13 @@ class SimpleRadar extends Component {
                         let norms = Object.entries(byProp)
                             .filter((prop) => nomes.includes(prop[0]))
                             .filter((kv) => {
-                                console.log(kv);
                                 return valid_years[kv[0]][
                                     selected.nome
                                 ].includes(kv[1][0].tempo);
                             })
                             .map((x) => x[1][0])
                             .map((x) => x.norm);
-                        avgs_ind[nome] = avgr(norms);
+                        avgs_ind[nome] = Math.max(...norms); //avgr(norms);
                     }
                 );
                 let i_nomes = atributo.indicadores.map((x) => x.nome);
