@@ -104,6 +104,7 @@ class SimpleRadar extends Component {
         // if (selected.indicadores === undefined) return <></>;
         let avgs_ind = {};
         let avgs_att = {};
+        let avgs_grupo = {};
         // console.log(graficos);
         // inclui todos os indicadores
         grupos.forEach((/** @type {Grupo} */ grupo) => {
@@ -157,6 +158,11 @@ class SimpleRadar extends Component {
                     .map((x) => x[1]);
                 avgs_att[atributo.nome] = Math.max(...a);
             });
+            let a_nomes = grupo.atributos.map((x) => x.nome);
+            let b = Object.entries(avgs_att)
+                .filter((att) => a_nomes.includes(att[0]))
+                .map((x) => x[1]);
+            avgs_grupo[grupo.nome] = Math.max(...b);
         });
         /// build radar
         let ys = Object.entries(avgs_att).map((x) => x[1]);
