@@ -198,7 +198,7 @@ function orderRawSerieHistorica(dados) {
             graficos[nome].series.push({
                 valor,
                 tempo,
-                propriedade: propriedade.nome,
+                // propriedade: propriedade.nome,
             });
 
             if (!graficos[nome].byProp[propriedade.nome]) {
@@ -207,7 +207,7 @@ function orderRawSerieHistorica(dados) {
             graficos[nome].byProp[propriedade.nome].push({
                 valor,
                 tempo,
-                propriedade,
+                // propriedade,
             });
 
             if (Object.entries(valor).length != 0) {
