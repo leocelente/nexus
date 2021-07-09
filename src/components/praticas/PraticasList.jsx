@@ -7,13 +7,14 @@ import TableJson from "../general/TableJson";
 
 import { selectPratica } from "../../redux/actions/praticasActions";
 import PraticaRadar from "./PraticaRadar";
+import { Pratica } from "../../api/models/pratica";
 
 class PraticasList extends Component {
     constructor(props) {
         super(props);
         this.state = {
             show: false,
-            pratica: { nome: "", descricao: {}, benchmark: {} },
+            pratica: new Pratica({}),
         };
     }
     setShow(show, pratica) {
@@ -27,7 +28,7 @@ class PraticasList extends Component {
     };
 
     handleClose = () => {
-        this.setShow(false, { nome: "", descricao: {}, benchmark: {} });
+        this.setShow(false, new Pratica({}));
     };
 
     handleShow = (pratica) => {
