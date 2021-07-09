@@ -4,8 +4,8 @@ import { Table } from "react-bootstrap";
 /**
  * Constroi uma tabela HTML com base em um elemento JSON
  * A coluna da esquerda são as keys e da direita os valores:
- * 
- * { 
+ *
+ * {
  *    "A": 1,
  *    "B": 2,
  * } vira
@@ -16,21 +16,30 @@ import { Table } from "react-bootstrap";
  */
 export default class TableJson extends Component {
     static propTypes = {
-        data: PropTypes.any
+        data: PropTypes.any,
     };
 
     render() {
+        let rm_accent = (str) =>
+            str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
         return (
             <div>
                 <Table size="sm" bordered>
                     <thead></thead>
                     <tbody>
-                        {Object.entries(this.props.data).sort().map((elem) => (
-                            <tr>
-                                <td>{elem[0]}:</td>
-                                <td>{elem[1]}</td>
-                            </tr>
-                        ))}
+                        {Object.entries(this.props.data)
+                            .sort((a, b) => {
+                                const x = rm_accent(a[0]);
+                                const y = rm_accent(b[0]);
+                                return x > y;
+                            })
+                            .map((elem) => (
+                                <tr>
+                                    <td>{elem[0]}:</td>
+                                    <td>{elem[1]}</td>
+                                </tr>
+                            ))}
                         <tr>
                             <td></td>
                             <td></td>
