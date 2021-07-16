@@ -114,7 +114,6 @@ const emptySelection = (
 
 class SimpleBar extends Component {
     componentDidMount() {
-        this.props.fetchPropriedades();
         this.props.fetchSerieHist();
     }
 
@@ -143,77 +142,57 @@ class SimpleBar extends Component {
 
         // Ordena os valores de acordo com ano e secundariamente
         // de acordo com a propriedade
-        series.sort((a, b) => {
+        const sorter = (a, b) => {
             if (a.tempo !== b.tempo) return a.tempo > b.tempo;
             else return a.propriedade > b.propriedade;
-        });
+        };
 
-        let datasets = [];
-        let labels = [];
-
-        // Constroi o array com o eixo x, isso é importante
-        // pois o valor de Y deve ser injetado no index especifico
-        // para correlacionar com o eixo X
-        series.forEach(({ tempo }) => {
-            if (!labels.includes(tempo)) {
-                labels.push(tempo);
-            }
-        });
-
-        // constroi 'datasets' que contem os data(eixo y) e os labels(eixo x)
-        // para o grafico
-        series.forEach(({ valor, tempo, propriedade }) => {
-            let dset = datasets.findIndex(({ label }) => label === propriedade);
-            if (dset === -1) {
-                datasets.push({ label: propriedade, data: [] });
-                dset = datasets.length - 1;
-                labels.forEach((_, i) => (datasets[dset].data[i] = 0));
-            }
-            datasets[dset].data[labels.indexOf(tempo)] = valor;
-        });
-        // Transforma os dados que contem multiplos valores (indicadores cujos
-        // dados são objetos), em multiplas entradas (variantes) em um objeto
-        // [ "indicador (variante): dados"]
-        let singleDataByPropriedade = {};
-        datasets.forEach((prop, i) => {
-            prop.data.forEach((point, j) => {
-                if (
-                    prop.data.length !== 0 &&
-                    Object.entries(prop.data[0]).length > 0
-                ) {
-                    // identifica a variante no objeto com a chave formada por:
-                    // "Indicador  (Variante)", eg: Producao (Animal) e Producao (Vegetal)"
-                    Object.entries(point).forEach((val, k) => {
-                        let t = prop.label + " (" + val[0] + ")";
-                        if (!singleDataByPropriedade[t])
-                            singleDataByPropriedade[t] = [];
-                        singleDataByPropriedade[t].push(val[1]);
-                    });
-                } else {
-                    // Caso não tenha variantes usa "Indicador": dados
-                    if (!singleDataByPropriedade[prop.label])
-                        singleDataByPropriedade[prop.label] = [];
-                    singleDataByPropriedade[prop.label] = prop.data;
-                }
-            });
-        });
-        data.labels = labels;
-        data.datasets = Object.entries(singleDataByPropriedade).map((kv, i) => {
-            return makeDataset(kv[0], kv[1], i);
-        });
-
-        return (
-            // Para o futuro, seria bom ter como selecionar entre a visualização
-            // em barras ou em linha.
-            <Col>
-                <Dropdown title="Gráfico" as={ButtonGroup} size="sm">
-                    <Dropdown.Item eventKey="0">Barras</Dropdown.Item>
-                    <Dropdown.Item eventKey="1">Linha</Dropdown.Item>
-                </Dropdown>
-                <Bar className="left-column" data={data} options={option} />
-            </Col>
-            // <Graph data={data} option={option} />
+        const lista_dados_por_propriedade = Object.values(
+            graficos[nome].byProp
         );
+
+        const years = new Set(
+            Object.values(lista_dados_por_propriedade)
+                .flat()
+                .sort(sorter)
+                .map((x) => x.tempo)
+        );
+        let lista_propriedades = Object.keys(graficos[nome].byProp);
+
+        let values = lista_dados_por_propriedade.map((dados, i_propriedade) =>
+            dados.sort(sorter).map((dado, _, valores) => {
+                return dado.valor;
+            })
+        );
+        const variantes_indicadores = new Set();
+        const variantes_dados = [];
+        if (values.flat().some((x) => Object.keys(x).length > 0)) {
+            lista_dados_por_propriedade.forEach((prop) => {
+                prop.forEach((dado) => {
+                    Object.keys(dado.valor).forEach((ponto) => {
+                        const text = dado.propriedade.nome + " (" + ponto + ")";
+                        variantes_indicadores.add(text);
+                        const index = Array.from([
+                            ...variantes_indicadores,
+                        ]).indexOf(text);
+                        if (variantes_dados[index] === undefined) {
+                            variantes_dados[index] = [];
+                        }
+                        variantes_dados[index].push(dado.valor[ponto]);
+                    });
+                });
+            });
+            lista_propriedades = [...variantes_indicadores];
+            values = variantes_dados;
+        }
+        data.labels = [...years];
+        const dsts = lista_propriedades.map((n, i) =>
+            makeDataset(n, values[i], i)
+        );
+        data.labels = [...years];
+        data.datasets = dsts;
+
+        return <Bar className="left-column" data={data} options={option} />;
     }
 }
 
