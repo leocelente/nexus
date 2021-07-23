@@ -30,7 +30,6 @@ class UsedPraticas extends Component {
         }
         /** @type {Pratica} */
         const pratica = this.props.pratica;
-        console.log(pratica);
         return (
             <>
                 <List

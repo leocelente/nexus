@@ -34,8 +34,8 @@ export default class TableJson extends Component {
                                 const y = rm_accent(b[0]);
                                 return x > y;
                             })
-                            .map((elem) => (
-                                <tr>
+                            .map((elem, i) => (
+                                <tr key={i}>
                                     <td>{elem[0]}:</td>
                                     <td>{elem[1]}</td>
                                 </tr>

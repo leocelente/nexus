@@ -39,6 +39,7 @@ class SimpleMap extends Component {
         // é o subconjunto de propriedades que fazem uso da pratica
         const pos = propriedades.map((p, i) => (
             <Marker
+                key={i}
                 lat={p.gps.latitude}
                 lng={p.gps.longitude}
                 nome={p.nome}
@@ -74,10 +75,10 @@ class SimpleMap extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {propriedades.map((p) => {
+                            {propriedades.map((p, i) => {
                                 if (p.gps.latitude !== 0.0)
                                     return (
-                                        <tr>
+                                        <tr key={i}>
                                             <td>
                                                 {propriedades.indexOf(p) + 1}
                                             </td>

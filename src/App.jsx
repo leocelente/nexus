@@ -18,16 +18,24 @@ function App() {
 
     return (
         <div className="App">
-            <Navbar bg="dark" >
+            <Navbar bg="dark">
                 <Navbar.Brand className="d-lg-none">
                     <>
                         <h2 style={{ color: "white" }}>PLA.CO.P.A.S</h2>
                     </>
                 </Navbar.Brand>
                 <Navbar.Collapse id="responsive-navbar-nav">
-                    <Nav className="mr-auto "> {/* mx-auto */}
-                        <h2 className="d-none d-sm-block" style={{ color: "white", /** marginLeft:'3.3rem' */ }}>
-                            Plataforma Cooperativa de Práticas Agrícolas Sustentaveis
+                    <Nav className="mr-auto ">
+                        {" "}
+                        {/* mx-auto */}
+                        <h2
+                            className="d-none d-sm-block"
+                            style={{
+                                color: "white" /** marginLeft:'3.3rem' */,
+                            }}
+                        >
+                            Plataforma Cooperativa de Práticas Agrícolas
+                            Sustentaveis
                         </h2>
                     </Nav>
                     <Nav>
@@ -60,11 +68,14 @@ function App() {
                 </Tab>
             </Tabs>
             <footer className="d-none d-sm-block">
-                <Row >
+                <Row>
                     <Col lg={6} sm={12}>
                         <Row style={{ height: "4rem" }}>
                             <span className="copyright">
-                                PLACOPAS, uma parceria <a href="http://nups.shs.eesc.usp.br/">NUPS</a> e <a href="https://www.embrapa.br">EMBRAPA</a> &copy; 2021
+                                PLACOPAS, uma parceria{" "}
+                                <a href="http://nups.shs.eesc.usp.br/">NUPS</a>{" "}
+                                e <a href="https://www.embrapa.br">EMBRAPA</a>{" "}
+                                &copy; 2021
                             </span>
                         </Row>
                     </Col>
