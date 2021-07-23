@@ -1,38 +1,57 @@
 import React, { useState } from "react";
-import { Button, ListGroup } from "react-bootstrap";
-/**
- * Wrapper para o ListGroup da React-Boostrap com 
- * eventos do botão e um botão extra em cada linha para 
- * mais informações (saiba mais), caso não null
- */
-function List(props) {
-  const [_, setKey] = useState(0);
-  return (
-    <div>
-      <ListGroup  onSelect={(k) => {setKey(k); if(props.onSelect) props.onSelect(k)}}>
-        <ListGroup.Item>
-          <h4>{props.title}</h4>
-        </ListGroup.Item>
-        {props.items.map((item, idx) => (
-          <ListGroup.Item
-            action
-            eventKey={idx}
-            key={idx}
-            className="d-flex justify-content-between align-items-center"
-          >
-            {item}
-            {props.onSaibaMais == null ? <span></span> : (<Button
-      size="sm"
-      variant="outline-secondary"
-      onClick={() => props.onSaibaMais(idx)}
-    >
-      Saiba Mais
-    </Button>) }
-          </ListGroup.Item>
-        ))}
-      </ListGroup>
-    </div>
-  );
-}
+import { Button, ListGroup, Form } from "react-bootstrap";
 
-export default List;
+export default function List(props) {
+    const [field, setField] = useState([]);
+    return (
+        <div>
+            <Form.Group controlId="my_multiselect_field">
+                <Form.Label></Form.Label>
+                <Form.Control
+                    as="select"
+                    multiple
+                    value={field}
+                    onChange={(
+                        e //{}
+                    ) => {
+                        const k = [].slice
+                            .call(e.target.selectedOptions)
+                            .map((item) => parseInt(item.value));
+                        setField(k);
+                        if (props.onSelect) props.onSelect(k);
+                    }}
+                    // style={{}}
+                    className="list-group"
+                >
+                    {/* <ListGroup.Item>
+                        <h4>{props.title}</h4>
+                    </ListGroup.Item> */}
+
+                    {props.items.map((item, idx) => (
+                        <option
+                            as={ListGroup.Item}
+                            action
+                            value={idx}
+                            key={idx}
+                            className="list-group-item d-flex listgroup-item justify-content-between align-items-center"
+                            style={{ fontSize: "1rem" }}
+                        >
+                            {item}
+                            {/* {props.onSaibaMais === null ? (
+                                <span></span>
+                            ) : (
+                                <a
+                                    size="sm"
+                                    variant="outline-secondary"
+                                    onClick={() => props.onSaibaMais(idx)}
+                                >
+                                    Saiba Mais
+                                </a>
+                            )} */}
+                        </option>
+                    ))}
+                </Form.Control>
+            </Form.Group>
+        </div>
+    );
+}
