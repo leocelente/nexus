@@ -73,8 +73,10 @@ class SimpleRadar extends Component {
         // organizados em grupos->atributos->indicadores
         const { grupos, graficos } = this.props;
 
-        /** @type {Pratica} */
-        const selected = this.props.selected;
+        /** @type {Array<Pratica>} */
+        // console.log(this.props.selected);
+        const pratica_selecionada = this.props.selected;
+        const conjunto_praticas = this.props.conjunto;
         /** @type {Array<Propriedade>} */
         const propriedades_all = this.props.propriedades;
         // console.log("selected", selected);
@@ -82,11 +84,17 @@ class SimpleRadar extends Component {
             xs.length === 0 ? 0 : xs.reduce((a, x) => a + x, 0) / xs.length;
 
         // Propriedades que aplicam a pratica 'selected'
-        const propriedades = propriedades_all.filter((prop) => {
-            const ns = prop.praticas.map((x) => x.pratica.nome);
-            return ns.includes(selected.nome);
+        const propriedades = propriedades_all.filter((propriedade) => {
+            const praticas_aplicadas = propriedade.praticas.map(
+                ({ pratica }) => pratica.nome
+            );
+            console.log(conjunto_praticas, praticas_aplicadas);
+            console.log(conjunto_praticas.includes(praticas_aplicadas));
+            return conjunto_praticas.some((selecionada) =>
+                praticas_aplicadas.includes(selecionada)
+            );
         });
-
+        console.log(propriedades);
         let valid_years = {};
         Object.entries(propriedades).forEach((kv) => {
             const ps = kv[1]?.praticas;
@@ -104,7 +112,17 @@ class SimpleRadar extends Component {
         let avgs_ind = {};
         let avgs_att = {};
         let avgs_grupo = {};
-        // console.log(graficos);
+        console.log(valid_years);
+        let filter_years = (propriedade) => {
+            let all_years = Object.entries(valid_years[propriedade])
+                .filter((kv_pratica) =>
+                    conjunto_praticas.includes(kv_pratica[0])
+                )
+                .map((x) => x[1])[0];
+            let years = new Set(all_years);
+            console.log([...years]);
+            return [...years];
+        };
         // inclui todos os indicadores
         grupos.forEach((/** @type {Grupo} */ grupo) => {
             grupo.atributos.forEach((/** @type {Atributo} */ atributo) => {
@@ -115,24 +133,22 @@ class SimpleRadar extends Component {
                         const { byProp, min, max } = graficos[nome];
                         Array.from(
                             // filtra `byProp` do indicador pela variavel `propriedades`
-                            Object.entries(byProp).filter((prop) =>
-                                nomes.includes(prop[0])
-                            )
-                        ).forEach((kv, i, a) => {
+                            Object.keys(byProp).filter((x) => nomes.includes(x))
+                        ).forEach((prop, i, a) => {
                             // faz a normalização
-                            const used_years =
-                                valid_years[kv[0]][selected.nome];
-                            byProp[kv[0]]
+                            const used_years = filter_years(prop);
+                            // valid_years[prop][pratica_selecionada.nome];
+                            byProp[prop]
                                 .filter(({ tempo }) =>
                                     used_years.includes(tempo)
                                 )
                                 .forEach(({ valor }, i, a) => {
                                     if (Object.entries(valor).length > 1) {
-                                        valor = avgr(
-                                            Object.entries(valor).map(
-                                                (x) => x[1]
-                                            )
-                                        );
+                                        const vs = Object.values(valor);
+                                        const m = Math.min(...vs);
+                                        const dm = Math.max(...vs) - m;
+                                        const norm = (x) => (x - m) / dm;
+                                        valor = avgr(vs.map(norm));
                                     }
                                     a[i].norm = (valor - min) / (max - min);
                                 });
@@ -141,9 +157,13 @@ class SimpleRadar extends Component {
                         let norms = Object.entries(byProp)
                             .filter((prop) => nomes.includes(prop[0]))
                             .filter((kv) => {
-                                return valid_years[kv[0]][
-                                    selected.nome
-                                ].includes(kv[1][0].tempo);
+                                return (
+                                    filter_years(kv[0])
+                                        // return valid_years[kv[0]][
+                                        //     pratica_selecionada.nome
+                                        // ]
+                                        .includes(kv[1][0].tempo)
+                                );
                             })
                             .map((x) => x[1][0])
                             .map((x) => x.norm);
@@ -163,8 +183,8 @@ class SimpleRadar extends Component {
             avgs_grupo[grupo.nome] = Math.max(...b);
         });
         /// build radar
-        let ys = Object.entries(avgs_att).map((x) => x[1]);
-        let labels = Object.entries(avgs_att).map((x) => x[0]);
+        let ys = Object.values(avgs_att);
+        let labels = Object.keys(avgs_att);
         let dataset = makeDataset("Benchmarks", ys, 0);
         let data = {
             labels,
@@ -231,6 +251,7 @@ const mapStateToProps = (state) => ({
     grupos: state.indicadores.grupos,
     selectedTema: state.praticas.selectedTema,
     selected: state.praticas.pratica,
+    conjunto: state.praticas.conjunto,
     propriedades: state.propriedades.propriedades,
 });
 

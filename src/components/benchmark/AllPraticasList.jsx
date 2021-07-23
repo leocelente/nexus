@@ -5,7 +5,10 @@ import { connect } from "react-redux";
 import { Button, Col, Modal, Row } from "react-bootstrap";
 import TableJson from "../general/TableJson";
 import PraticaRadar from "../praticas/PraticaRadar";
-import { selectPratica } from "../../redux/actions/praticasActions";
+import {
+    selectPratica,
+    editConjunto,
+} from "../../redux/actions/praticasActions";
 import { Pratica } from "../../api/models/pratica";
 
 class AllPraticasList extends Component {
@@ -22,17 +25,16 @@ class AllPraticasList extends Component {
             pratica,
         });
     }
-    handler = (i) => {
-        console.log(i);
-        this.props.selectPratica(i);
-    };
 
-    handleClose = () => {
-        this.setShow(false, new Pratica({}));
-    };
+    handler = (idxs) => {
+        const a_nomes = this.props.propriedades
+            .map((propriedade) => propriedade.praticas)
+            .filter((list_praticas) => list_praticas.length > 0);
+        const nomes = [].concat.apply([], a_nomes).map((z) => z.pratica.nome);
 
-    handleShow = (pratica) => {
-        this.setShow(true, pratica);
+        // this.props.selectPratica(i);
+        this.props.editConjunto(idxs.map((i) => nomes[i]));
+        // this.setState({ pratica: i });
     };
 
     render() {
@@ -49,11 +51,11 @@ class AllPraticasList extends Component {
             .apply([], a_praticas)
             .filter((v, i, s) => nomes.indexOf(v.pratica.nome) === i); // unique
 
-        console.log(praticas);
+        // console.log(praticas);
         if (praticas[0] === undefined) return <></>;
         return (
             <div>
-                <Modal
+                {/* <Modal
                     size="xl"
                     show={this.state.show}
                     onHide={this.handleClose}
@@ -78,12 +80,12 @@ class AllPraticasList extends Component {
                             Close
                         </Button>
                     </Modal.Footer>
-                </Modal>
+                </Modal> */}
 
                 <List
                     items={praticas.map((x) => x.pratica.nome)}
                     title="Praticas"
-                    onSelect={(p) => this.handler(praticas[p].pratica)}
+                    onSelect={(p) => this.handler(p)}
                     onSaibaMais={(idx) =>
                         this.handleShow(praticas[idx].pratica)
                     }
@@ -95,6 +97,9 @@ class AllPraticasList extends Component {
 
 const mapStateToProps = (state) => ({
     propriedades: state.propriedades.propriedades,
+    conjunto: state.praticas.conjunto,
 });
 
-export default connect(mapStateToProps, { selectPratica })(AllPraticasList);
+export default connect(mapStateToProps, { selectPratica, editConjunto })(
+    AllPraticasList
+);
