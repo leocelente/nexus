@@ -182,7 +182,10 @@ async function getSerieHistoricaRaw() {
  * TODO: Separar em duas funções
  */
 function orderRawSerieHistorica(dados) {
-    let graficos = {};
+    let graficos = new Map();
+
+    dados.forEach((x) => graficos.set(x.nome, {}));
+
     dados.forEach(({ indicador, data }) => {
         let { nome, titulo, unidade } = indicador;
         graficos[nome] = {
@@ -190,8 +193,8 @@ function orderRawSerieHistorica(dados) {
             series: [],
             titulo,
             unidade,
-            min: 1e12,
-            max: -1e12,
+            min: 1e9,
+            max: -1e9,
         };
 
         data.forEach(({ valor, tempo, propriedade, praticas }) => {
