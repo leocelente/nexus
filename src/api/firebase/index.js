@@ -195,11 +195,11 @@ function orderRawSerieHistorica(dados) {
 
         data.forEach(({ valor, tempo, propriedade, praticas }) => {
             // por indicador
-            graficos[nome].series.push({
-                valor,
-                tempo,
-                propriedade: propriedade.nome,
-            });
+            // graficos[nome].series.push({
+            //     valor,
+            //     tempo,
+            //     propriedade: propriedade.nome,
+            // });
 
             if (!graficos[nome].byProp[propriedade.nome]) {
                 graficos[nome].byProp[propriedade.nome] = [];
@@ -222,6 +222,7 @@ function orderRawSerieHistorica(dados) {
             }
         });
     });
+
     return graficos;
 }
 
@@ -235,6 +236,6 @@ export async function fetchSerieHistoricaFirebase(dispatch) {
 
     dispatch({
         type: FETCH_SERIE_HIST,
-        payload: { dados, graficos },
+        payload: { graficos },
     });
 }
