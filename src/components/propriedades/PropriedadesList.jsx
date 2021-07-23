@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Propriedade } from "../../api/models/propriedade";
-import { selectPropriedade } from "../../redux/actions/propriedadesActions";
+import {
+    selectPropriedade,
+    fetchPropriedades,
+} from "../../redux/actions/propriedadesActions";
 import List from "../general/List";
 
 /**
@@ -9,6 +12,10 @@ import List from "../general/List";
  * de saiba mais
  */
 class PropriedadesList extends Component {
+    componentDidMount() {
+        this.props.fetchPropriedades();
+    }
+
     handle = (i) => {
         this.props.selectPropriedade(i);
     };
@@ -48,6 +55,7 @@ class PropriedadesList extends Component {
 const mapStateToProps = (state) => ({
     propriedades: state.propriedades.propriedades,
 });
-export default connect(mapStateToProps, { selectPropriedade })(
-    PropriedadesList
-);
+export default connect(mapStateToProps, {
+    selectPropriedade,
+    fetchPropriedades,
+})(PropriedadesList);
