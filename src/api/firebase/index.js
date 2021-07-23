@@ -165,9 +165,10 @@ async function getSerieHistoricaRaw() {
         const data = await Helpers.getCollection(indicador.ref, "data");
         await Helpers.asyncForEach(data, async (ponto, j) => {
             dados[i].data[j] = ponto.data();
-            dados[i].data[j].propriedade = await Helpers.followReference(
+            const propriedade = await Helpers.followReference(
                 ponto.data().propriedade
             );
+            dados[i].data[j].propriedade = { nome: propriedade.nome };
         });
     });
     return dados;
