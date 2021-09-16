@@ -1,33 +1,46 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Button, ListGroup, Form } from "react-bootstrap";
 
-export default function List(props) {
-    const [field, setField] = useState([]);
-    return (
-        <div>
-            <Form.Group controlId="my_multiselect_field">
-                <Form.Label></Form.Label>
+export default class List extends Component {
+    static propTypes = {
+        title: PropTypes.string,
+        onSelect: PropTypes.func,
+    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            field: [],
+        };
+    }
+
+    setField(field) {
+        this.setState({
+            field,
+        });
+    }
+
+    render() {
+        const cid = `m${this.props.title.replaceAll(" ", "")}`;
+        return (
+            <div>
+                {/* <Form.Group> */}
                 <Form.Control
                     as="select"
+                    id={`${cid}_sel`}
                     multiple
-                    value={field}
-                    onChange={(
-                        e //{}
-                    ) => {
+                    value={this.state.field}
+                    onChange={(e) => {
                         const k = [].slice
                             .call(e.target.selectedOptions)
                             .map((item) => parseInt(item.value));
-                        setField(k);
-                        if (props.onSelect) props.onSelect(k);
+                        this.setField(k);
+                        if (this.props.onSelect) this.props.onSelect(k);
                     }}
-                    // style={{}}
                     className="list-group"
                 >
-                    {/* <ListGroup.Item>
-                        <h4>{props.title}</h4>
-                    </ListGroup.Item> */}
-
-                    {props.items.map((item, idx) => (
+                    {this.props.items.map((item, idx) => (
                         <option
                             as={ListGroup.Item}
                             action
@@ -37,21 +50,11 @@ export default function List(props) {
                             style={{ fontSize: "1rem" }}
                         >
                             {item}
-                            {/* {props.onSaibaMais === null ? (
-                                <span></span>
-                            ) : (
-                                <a
-                                    size="sm"
-                                    variant="outline-secondary"
-                                    onClick={() => props.onSaibaMais(idx)}
-                                >
-                                    Saiba Mais
-                                </a>
-                            )} */}
                         </option>
                     ))}
                 </Form.Control>
-            </Form.Group>
-        </div>
-    );
+                {/* </Form.Group> */}
+            </div>
+        );
+    }
 }
