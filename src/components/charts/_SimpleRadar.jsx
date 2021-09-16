@@ -192,6 +192,7 @@ class SimpleRadar extends Component {
 
         let datasets = [];
         let labels = [];
+
         cenarios.forEach((cenario) => {
             const points = this.buildData(
                 grupos,
@@ -199,10 +200,12 @@ class SimpleRadar extends Component {
                 cenario_data.get(cenario.nome),
                 propriedades_all
             );
-            datasets.push(
-                makeDataset(cenario.nome, points.values, cenario.index)
-            );
-            labels = points.labels;
+            if (points?.labels !== undefined) {
+                datasets.push(
+                    makeDataset(cenario.nome, points.values, cenario.index)
+                );
+                labels = points.labels;
+            }
         });
         let data = {
             labels,
