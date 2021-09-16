@@ -14,6 +14,7 @@ export default function Select(props) {
                     <Form.Group controlId="exampleForm.ControlSelect1">
                         <Form.Control
                             as="select"
+                            style={{ paddingRight: 0 }}
                             onChange={(e) =>
                                 props.onSelect(e.target.selectedIndex)
                             }

@@ -49,6 +49,8 @@ h2 {
 
 .list-group {
     margin-bottom: 1.5rem;
+    margin-right: 0;
+    padding-right: 0;
     /* padding: 1rem; */
 }
 
