@@ -6,6 +6,7 @@ import SelectTema from "../components/praticas/SelectTema";
 import SimpleRadar from "../components/charts/_SimpleRadar";
 import PropertyBar from "../components/benchmark/PropertyBar";
 import AllPraticasList from "../components/benchmark/AllPraticasList";
+import CenarioManager from "../components/benchmark/CenarioManager";
 /**
  * Página de benchmark está menos definida, em teoria mostraria o
  * grafico de como praticas se relacionam com indicadores [normalizados]. Mas
@@ -25,10 +26,6 @@ export default class Benchmark extends Component {
                                     esconder a pratica no gráfico
                                 </span>
                             </Card>
-                            {/* Testes */}
-                            {/* <PropertyBar nome="Propriedade" valor={0.75} />
-                            <PropertyBar nome="Propriedade" valor={0.25} />
-                            <PropertyBar nome="Propriedade" valor={0.5} /> */}
                         </>
                     }
                     right={
@@ -45,8 +42,9 @@ export default class Benchmark extends Component {
                             <br></br>
                             {/* <SelectTema /> */}
                             <br></br>
-                            <AllPraticasList />
+                            {/* <AllPraticasList /> */}
                             {/*<IndicadoresList /> */}
+                            <CenarioManager />
                         </>
                     }
                 />
