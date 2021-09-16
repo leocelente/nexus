@@ -7,19 +7,18 @@ import React, { Component } from "react";
 import { Card } from "react-bootstrap";
 import { Radar } from "react-chartjs-2";
 import { connect } from "react-redux";
+import { Analise, Cenario } from "../../api/models/conjunto";
 import { Atributo, Grupo, Indicador } from "../../api/models/indicador";
 import { Pratica } from "../../api/models/pratica";
 import { Propriedade } from "../../api/models/propriedade";
-import PropertyBar from "../benchmark/PropertyBar";
-import TableJson from "../general/TableJson";
 
 const colors = [
-    "rgba(255, 99, 132, 0.5)",
-    "rgba(54, 162, 235, 0.5)",
-    "rgba(255, 206, 86, 0.5)",
-    "rgba(75, 192, 192, 0.5)",
-    "rgba(153, 99, 255, 0.5)",
-    "rgba(255, 159, 64, 0.5)",
+    "rgba(255, 99, 132, 0.35)",
+    "rgba(54, 162, 235, 0.35)",
+    "rgba(255, 206, 86, 0.35)",
+    "rgba(75, 192, 192, 0.35)",
+    "rgba(153, 99, 255, 0.35)",
+    "rgba(255, 159, 64, 0.35)",
 ];
 
 // Cria um dataset para a biblioteca ChartJs com o
@@ -31,14 +30,9 @@ function makeDataset(label, data, index) {
         data,
         backgroundColor: colors[index % colors.length],
         borderColor: colors[index % colors.length],
-        borderWidth: 1,
+        borderWidth: 5,
     };
 }
-
-const base = {
-    labels: ["Agua", "Alimento", "Energia"],
-    datasets: [makeDataset("Test", [10, 3, 4], 0)],
-};
 
 const options = {
     scale: {
@@ -65,21 +59,17 @@ class SimpleRadar extends Component {
         super(props);
         this.state = { year: new Date().getFullYear() - 1 };
     }
+
     setYear(/** @type {Number} */ year) {
         this.setState({ year });
     }
-    render() {
-        // lembrando que os indicadores são
-        // organizados em grupos->atributos->indicadores
-        const { grupos, graficos } = this.props;
 
-        /** @type {Array<Pratica>} */
-        // console.log(this.props.selected);
-        const pratica_selecionada = this.props.selected;
-        const conjunto_praticas = this.props.conjunto;
-        /** @type {Array<Propriedade>} */
-        const propriedades_all = this.props.propriedades;
-        // console.log("selected", selected);
+    buildData(grupos, graficos, conjunto_praticas, propriedades_all) {
+        const base = {
+            labels: ["Agua", "Alimento", "Energia"],
+            datasets: [makeDataset("Test", [10, 3, 4], 0)],
+        };
+
         let avgr = (/** @type {Array<Number>} */ xs) =>
             xs.length === 0 ? 0 : xs.reduce((a, x) => a + x, 0) / xs.length;
 
@@ -88,13 +78,11 @@ class SimpleRadar extends Component {
             const praticas_aplicadas = propriedade.praticas.map(
                 ({ pratica }) => pratica.nome
             );
-            console.log(conjunto_praticas, praticas_aplicadas);
-            console.log(conjunto_praticas.includes(praticas_aplicadas));
             return conjunto_praticas.some((selecionada) =>
                 praticas_aplicadas.includes(selecionada)
             );
         });
-        console.log(propriedades);
+
         let valid_years = {};
         Object.entries(propriedades).forEach((kv) => {
             const ps = kv[1]?.praticas;
@@ -108,11 +96,10 @@ class SimpleRadar extends Component {
 
         const nomes = propriedades.map((x) => x.nome);
         if (graficos === undefined) return <></>;
-        // if (selected.indicadores === undefined) return <></>;
         let avgs_ind = {};
         let avgs_att = {};
         let avgs_grupo = {};
-        console.log(valid_years);
+
         let filter_years = (propriedade) => {
             let all_years = Object.entries(valid_years[propriedade])
                 .filter((kv_pratica) =>
@@ -120,17 +107,18 @@ class SimpleRadar extends Component {
                 )
                 .map((x) => x[1])[0];
             let years = new Set(all_years);
-            console.log([...years]);
             return [...years];
         };
+        let view = {};
         // inclui todos os indicadores
         grupos.forEach((/** @type {Grupo} */ grupo) => {
             grupo.atributos.forEach((/** @type {Atributo} */ atributo) => {
                 // TODO: como é possivel isso ser undefined?
                 atributo.indicadores.forEach(
                     (/** @type {Indicador} */ { nome }) => {
-                        if (graficos[nome] === undefined) return;
-                        const { byProp, min, max } = graficos[nome];
+                        if (graficos.get(nome) === undefined) return;
+                        const { byProp, min, max } = graficos.get(nome);
+                        view[nome] = byProp;
                         Array.from(
                             // filtra `byProp` do indicador pela variavel `propriedades`
                             Object.keys(byProp).filter((x) => nomes.includes(x))
@@ -157,12 +145,8 @@ class SimpleRadar extends Component {
                         let norms = Object.entries(byProp)
                             .filter((prop) => nomes.includes(prop[0]))
                             .filter((kv) => {
-                                return (
-                                    filter_years(kv[0])
-                                        // return valid_years[kv[0]][
-                                        //     pratica_selecionada.nome
-                                        // ]
-                                        .includes(kv[1][0].tempo)
+                                return filter_years(kv[0]).includes(
+                                    kv[1][0].tempo
                                 );
                             })
                             .map((x) => x[1][0])
@@ -182,74 +166,56 @@ class SimpleRadar extends Component {
                 .map((x) => x[1]);
             avgs_grupo[grupo.nome] = Math.max(...b);
         });
+
         /// build radar
-        let ys = Object.values(avgs_att);
+        let values = Object.values(avgs_att);
         let labels = Object.keys(avgs_att);
-        let dataset = makeDataset("Benchmarks", ys, 0);
+
+        return { labels, values };
+    }
+
+    render() {
+        // lembrando que os indicadores são
+        // organizados em grupos->atributos->indicadores
+        const { grupos, graficos } = this.props;
+
+        let cenario_data = new Map();
+
+        /** @type {Array<Cenario>} */
+        const cenarios = this.props.cenarios;
+        cenarios.forEach(({ nome, praticas }) =>
+            cenario_data.set(nome, praticas)
+        );
+
+        /** @type {Array<Propriedade>} */
+        const propriedades_all = this.props.propriedades;
+
+        let datasets = [];
+        let labels = [];
+        cenarios.forEach((cenario) => {
+            const points = this.buildData(
+                grupos,
+                graficos,
+                cenario_data.get(cenario.nome),
+                propriedades_all
+            );
+            datasets.push(
+                makeDataset(cenario.nome, points.values, cenario.index)
+            );
+            labels = points.labels;
+        });
         let data = {
             labels,
-            datasets: [dataset],
+            datasets,
         };
-        //
-        // constroi a tabela com indicadores normalizados
-        // por propriedade (filtrada) e ano
-        let tabela = {};
-        Object.entries(graficos).forEach((kv_i) => {
-            tabela[kv_i[0]] = [];
-            const prop_kv = /* Array.from( */ Object.entries(kv_i[1].byProp) //
-                // TODO: redundante: filtra novamente `byProp`
-                .filter((prop) => {
-                    return nomes.includes(prop[0]);
-                });
-            prop_kv.forEach((kv_p) => {
-                tabela[kv_i[0]][kv_p[0]] = kv_i[1].byProp[kv_p[0]];
-            });
-        });
 
-        return (
-            <>
-                <Radar data={data} options={options} />
-                {/* {Object.entries(tabela).map((kv) => {
-                    const props = Object.entries(kv[1]);
-                    const ele = props.map((kv_) => {
-                        const points = kv_[1].sort((a, b) => a.tempo < b.tempo);
-                        return (
-                            <p>
-                                {kv_[0]}:{" "}
-                                {points.map((x) => (
-                                    <>
-                                        <br />
-                                        <span>
-                                            {x.tempo}:{" "}
-                                            <u>{x.norm?.toFixed(4)}</u>
-                                            {/* <PropertyBar
-                                                nome={x.tempo}
-                                                valor={x.norm.toFixed(4)}
-                                            /> }
-                                        </span>
-                                    </>
-                                ))}
-                            </p>
-                        );
-                    });
-                    return (
-                        <Card style={{ color: "black" }}>
-                            <Card.Title>
-                                <h5>{kv[0]}</h5>
-                            </Card.Title>
-                            {ele}
-                        </Card>
-                    );
-                })} */}
-            </>
-        );
+        return <Radar data={data} options={options} />;
     }
 }
 const mapStateToProps = (state) => ({
+    cenarios: state.praticas.analise.cenarios,
     graficos: state.indicadores.graficos,
-    data: state.praticas.data,
     grupos: state.indicadores.grupos,
-    selectedTema: state.praticas.selectedTema,
     selected: state.praticas.pratica,
     conjunto: state.praticas.conjunto,
     propriedades: state.propriedades.propriedades,
