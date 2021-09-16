@@ -1,5 +1,11 @@
 import { fetchPraticasFirebase } from "../../api/firebase/index.js";
-import { SELECT_TEMA, SELECT_PRATICA, EDIT_CONJUNTO } from "./index.js";
+import {
+    SELECT_TEMA,
+    SELECT_PRATICA,
+    EDIT_CONJUNTO,
+    ADD_CONJUNTO,
+    REM_CONJUNTO,
+} from "./index.js";
 
 export const selectTema = (id) => ({
     type: SELECT_TEMA,
@@ -11,11 +17,16 @@ export const selectPratica = (pratica) => ({
     payload: { pratica },
 });
 
-export const editConjunto = (conjunto) => ({
+export const editConjunto = (index, praticas) => ({
     type: EDIT_CONJUNTO,
-    payload: { conjunto },
+    payload: { index, praticas },
 });
 
 export const fetchPraticas = () => async (dispatch) => {
     await fetchPraticasFirebase(dispatch);
 };
+
+export const addConjunto = () => ({
+    type: ADD_CONJUNTO,
+    payload: {},
+});
