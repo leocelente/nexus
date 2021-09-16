@@ -7,6 +7,7 @@
  * -Celente
  */
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Bar, Line } from "react-chartjs-2";
 import { connect } from "react-redux";
 import { fetchPropriedades } from "../../redux/actions/propriedadesActions";
@@ -28,43 +29,8 @@ const colors = [
     "rgba(255, 159, 64, 0.25)",
 ];
 
-const options = {
-    scales: {
-        yAxes: [
-            {
-                scaleLabel: {
-                    display: true,
-                    labelString: "Old",
-                },
-                ticks: {
-                    beginAtZero: true,
-                },
-            },
-        ],
-    },
-    title: {
-        display: true,
-        text: "Some Title",
-        fontSize: 16,
-    },
-    legend: {
-        display: true,
-        position: "bottom",
-    },
-    mode: "index",
-    responsive: true,
-};
-
 // Se ver esses valores ao não deu certo
-const base = {
-    labels: [2024, 2025, 2026],
-    datasets: [
-        {
-            label: "Propriedade X",
-            data: [-10, 20, -40],
-        },
-    ],
-};
+
 /**
  *
  * @param {String} label
@@ -113,12 +79,55 @@ const emptySelection = (
 );
 
 class SimpleBar extends Component {
+    static propTypes = {
+        transposed: PropTypes.bool,
+    };
+    static defaultProps = {
+        transposed: false,
+    };
     componentDidMount() {
-        this.props.fetchSerieHist();
+        if (!this.props.transposed) this.props.fetchSerieHist();
     }
 
     render() {
+        const options = {
+            scales: {
+                yAxes: [
+                    {
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Old",
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                        },
+                    },
+                ],
+            },
+            title: {
+                display: true,
+                text: "Some Title",
+                fontSize: 16,
+            },
+            legend: {
+                display: true,
+                position: "bottom",
+            },
+            mode: "index",
+            responsive: true,
+        };
+
+        const base = {
+            labels: [2024, 2025, 2026],
+            datasets: [
+                {
+                    label: "Propriedade X",
+                    data: [-10, 20, -40],
+                },
+            ],
+        };
         if (this.props.selected?.indicador?.nome === "") {
+            if (this.props.transposed) return <></>;
             return emptySelection;
         }
         if (this.props.graficos === undefined) return <></>;
@@ -131,24 +140,33 @@ class SimpleBar extends Component {
         // encontra nos dados vindos do banco (graficos),
         // o indicador com o nome do selecionado (selected.indicador)
         const { nome } = this.props.selected.indicador;
-        const result = Object.entries(graficos).find((a) => a[0] === nome);
+        const result = [...graficos.entries()].find((a) => a[0] === nome);
         if (result === undefined) return <></>;
         const indicador = result[1];
 
         // com as informações desse indicador constroi as opções
         // para a biblioteca ChartJS
-        const { series, titulo, unidade } = indicador;
+        const { titulo, unidade } = indicador;
         setOptions(option, titulo, unidade);
 
         // Ordena os valores de acordo com ano e secundariamente
         // de acordo com a propriedade
-        const sorter = (a, b) => {
-            if (a.tempo !== b.tempo) return a.tempo > b.tempo;
-            else return a.propriedade > b.propriedade;
-        };
 
+        let sorter;
+        if (this.props.transposed) {
+            sorter = (a, b) => {
+                if (a.propriedade !== b.propriedade)
+                    return a.propriedade > b.propriedade;
+                else return a.tempo > b.tempo;
+            };
+        } else {
+            sorter = (a, b) => {
+                if (a.tempo !== b.tempo) return a.tempo > b.tempo;
+                else return a.propriedade > b.propriedade;
+            };
+        }
         const lista_dados_por_propriedade = Object.values(
-            graficos[nome].byProp
+            graficos.get(nome).byProp
         );
 
         const years = new Set(
@@ -157,12 +175,10 @@ class SimpleBar extends Component {
                 .sort(sorter)
                 .map((x) => x.tempo)
         );
-        let lista_propriedades = Object.keys(graficos[nome].byProp);
+        let lista_propriedades = Object.keys(graficos.get(nome).byProp);
 
-        let values = lista_dados_por_propriedade.map((dados, i_propriedade) =>
-            dados.sort(sorter).map((dado, _, valores) => {
-                return dado.valor;
-            })
+        let values = lista_dados_por_propriedade.map((dados) =>
+            dados.sort(sorter).map(({ valor }) => valor)
         );
         const variantes_indicadores = new Set();
         const variantes_dados = [];
@@ -185,12 +201,24 @@ class SimpleBar extends Component {
             lista_propriedades = [...variantes_indicadores];
             values = variantes_dados;
         }
-        data.labels = [...years];
-        const dsts = lista_propriedades.map((n, i) =>
-            makeDataset(n, values[i], i)
-        );
-        data.labels = [...years];
-        data.datasets = dsts;
+
+        let dsts;
+        if (this.props.transposed) {
+            let transpose = (matrix) =>
+                matrix[0].map((_, i) => matrix.map((x) => x[i]));
+            values = transpose(values);
+            const anos = [...years];
+            dsts = anos.map((n, i) => makeDataset(String(n), values[i], i));
+            data.labels = [...lista_propriedades];
+            data.datasets = dsts;
+        } else if (this.props.transposed === false) {
+            dsts = lista_propriedades.map((n, i) =>
+                makeDataset(n, values[i], i)
+            );
+
+            data.labels = [...years];
+            data.datasets = dsts;
+        }
 
         return <Bar className="left-column" data={data} options={option} />;
     }

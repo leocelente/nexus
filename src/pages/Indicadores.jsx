@@ -4,7 +4,6 @@ import GrupoAtributo from "../components/indicadores/GrupoAtributo";
 import IndicadoresList from "../components/indicadores/IndicadoresList";
 import PageBase from "../components/general/PageBase";
 import SimpleBar from "../components/charts/SimpleBar";
-import VariantBar from "../components/charts/VariantBar";
 
 /**
  * Pagina dos Indicadores, duas colunas uma com os graficos e outra com
@@ -17,7 +16,7 @@ export default class Indicadores extends Component {
             <div>
                 <PageBase
                     left={<SimpleBar />}
-                    extra={<VariantBar />}
+                    extra={<SimpleBar transposed />}
                     right={
                         <div>
                             <Card>
@@ -33,7 +32,9 @@ export default class Indicadores extends Component {
                             <GrupoAtributo />
                             <br></br>
                             {/* <List items={indicadores} title="Indicadores" /> */}
-                            <IndicadoresList />
+                            <IndicadoresList
+                                style={{ height: "40vh", width: "100%" }}
+                            />
                         </div>
                     }
                 />
