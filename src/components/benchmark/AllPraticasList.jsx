@@ -47,6 +47,7 @@ class AllPraticasList extends Component {
         const a_praticas = this.props.propriedades
             .map((propriedade) => propriedade.praticas)
             .filter((list_praticas) => list_praticas.length > 0);
+        console.table(a_praticas);
         const praticas = [].concat
             .apply([], a_praticas)
             .filter((v, i, s) => nomes.indexOf(v.pratica.nome) === i); // unique

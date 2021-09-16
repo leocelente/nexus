@@ -116,6 +116,8 @@ export async function fetchPraticasFirebase(dispatch) {
         });
     });
 
+    console.log(temas);
+
     dispatch({
         type: FETCH_PRATICAS,
         payload: { temas },
@@ -188,27 +190,20 @@ function orderRawSerieHistorica(dados) {
 
     dados.forEach(({ indicador, data }) => {
         let { nome, titulo, unidade } = indicador;
-        graficos[nome] = {
+        graficos.set(nome, {
             byProp: {},
             series: [],
             titulo,
             unidade,
             min: 1e9,
             max: -1e9,
-        };
+        });
 
         data.forEach(({ valor, tempo, propriedade, praticas }) => {
-            // por indicador
-            // graficos[nome].series.push({
-            //     valor,
-            //     tempo,
-            //     propriedade: propriedade.nome,
-            // });
-
-            if (!graficos[nome].byProp[propriedade.nome]) {
-                graficos[nome].byProp[propriedade.nome] = [];
+            if (!graficos.get(nome).byProp[propriedade.nome]) {
+                graficos.get(nome).byProp[propriedade.nome] = [];
             }
-            graficos[nome].byProp[propriedade.nome].push({
+            graficos.get(nome).byProp[propriedade.nome].push({
                 valor,
                 tempo,
                 propriedade,
@@ -217,15 +212,35 @@ function orderRawSerieHistorica(dados) {
             if (Object.entries(valor).length != 0) {
                 let kvs = Object.entries(valor);
                 kvs.forEach((kv) => {
-                    graficos[nome].min = Math.min(graficos[nome].min, kv[1]);
-                    graficos[nome].max = Math.max(graficos[nome].max, kv[1]);
+                    graficos.get(nome).min = Math.min(
+                        graficos.get(nome).min,
+                        kv[1]
+                    );
+                    graficos.get(nome).max = Math.max(
+                        graficos.get(nome).max,
+                        kv[1]
+                    );
                 });
             } else {
-                graficos[nome].min = Math.min(graficos[nome].min, valor);
-                graficos[nome].max = Math.max(graficos[nome].max, valor);
+                graficos.get(nome).min = Math.min(
+                    graficos.get(nome).min,
+                    valor
+                );
+                graficos.get(nome).max = Math.max(
+                    graficos.get(nome).max,
+                    valor
+                );
             }
         });
     });
+
+    function mapEntriesToString(entries) {
+        return (
+            Array.from(entries, ([k, v]) => `\n  ${k}: ${v}`).join("") + "\n"
+        );
+    }
+
+    // console.log(mapEntriesToString(graficos));
 
     return graficos;
 }
