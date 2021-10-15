@@ -19,4 +19,15 @@ export class Helpers {
             await fun(array[i], i);
         }
     }
+
+    static detectBrowser() {
+        const agent = navigator.userAgent;
+        if (agent.includes("Chrome")) {
+            return "chrome";
+        } else if (agent.includes("Firefox")) {
+            return "firefox";
+        } else {
+            return "other";
+        }
+    }
 }
