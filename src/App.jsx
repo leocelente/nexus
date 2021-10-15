@@ -12,39 +12,15 @@ import img_usp from "./images/usp-preto.png";
 import img_embrapa from "./images/embrapa.png";
 import img_eesc from "./images/eesc-horizontal.png";
 import img_cnpq from "./images/cnpq.png";
+import { Link } from "react-router-dom";
+import Header from "./components/general/Header";
 
 function App() {
     const [aba, setAba] = useState("home");
 
     return (
         <div className="App">
-            <Navbar bg="dark">
-                <Navbar.Brand className="d-lg-none">
-                    <>
-                        <h2 style={{ color: "white" }}>PLA.CO.P.A.S</h2>
-                    </>
-                </Navbar.Brand>
-                <Navbar.Collapse id="responsive-navbar-nav">
-                    <Nav className="mr-auto ">
-                        {" "}
-                        {/* mx-auto */}
-                        <h2
-                            className="d-none d-sm-block"
-                            style={{
-                                color: "white" /** marginLeft:'3.3rem' */,
-                            }}
-                        >
-                            Plataforma Cooperativa de Práticas Agrícolas
-                            Sustentaveis
-                        </h2>
-                    </Nav>
-                    <Nav>
-                        <Nav.Link href="#admin" style={{ color: "white" }}>
-                            Admin
-                        </Nav.Link>
-                    </Nav>
-                </Navbar.Collapse>
-            </Navbar>
+            <Header />
             <Tabs
                 id="main-pages-tabs"
                 fg="dark"
