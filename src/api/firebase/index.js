@@ -116,8 +116,6 @@ export async function fetchPraticasFirebase(dispatch) {
         });
     });
 
-    console.log(temas);
-
     dispatch({
         type: FETCH_PRATICAS,
         payload: { temas },
@@ -143,7 +141,6 @@ export async function fetchPropriedadesFirebase(dispatch) {
         });
         propriedades[i] = new Propriedade(data);
     });
-
     dispatch({
         type: FETCH_PROPRIEDADES,
         payload: { propriedades },
@@ -233,14 +230,6 @@ function orderRawSerieHistorica(dados) {
             }
         });
     });
-
-    function mapEntriesToString(entries) {
-        return (
-            Array.from(entries, ([k, v]) => `\n  ${k}: ${v}`).join("") + "\n"
-        );
-    }
-
-    // console.log(mapEntriesToString(graficos));
 
     return graficos;
 }
