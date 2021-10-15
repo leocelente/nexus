@@ -16,6 +16,7 @@ import pattern from "patternomaly"; // Biblioteca para gerar padrões (quadradin
 // no grafico para criar um destaque
 import { Col, Row, Dropdown, ButtonGroup } from "react-bootstrap";
 import Graph from "../general/Graph";
+import { Helpers } from "../../api/firebase/utils";
 
 /* Padroniza as cores vistas. Ainda não funciona corretamente
     devido as multiplas renderizações do react.
@@ -151,17 +152,16 @@ class SimpleBar extends Component {
 
         // Ordena os valores de acordo com ano e secundariamente
         // de acordo com a propriedade
-
         let sorter;
         if (this.props.transposed) {
             sorter = (a, b) => {
                 if (a.propriedade !== b.propriedade)
                     return a.propriedade > b.propriedade;
-                else return a.tempo > b.tempo;
+                else return a.tempo - b.tempo;
             };
         } else {
             sorter = (a, b) => {
-                if (a.tempo !== b.tempo) return a.tempo > b.tempo;
+                if (a.tempo !== b.tempo) return a.tempo - b.tempo;
                 else return a.propriedade > b.propriedade;
             };
         }
