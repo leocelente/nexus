@@ -15,8 +15,8 @@ export default class Indicadores extends Component {
         return (
             <div>
                 <PageBase
-                    left={<SimpleBar />}
-                    extra={<SimpleBar transposed />}
+                    left={<SimpleBar transposed={false} />}
+                    extra={<SimpleBar transposed={true} />}
                     right={
                         <div>
                             <Card>
