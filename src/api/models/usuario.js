@@ -2,6 +2,7 @@ import { Propriedade } from "./propriedade";
 
 export class Usuario {
     nome = "";
+    role = "";
     propriedade = new Propriedade({});
     firebaseUser = null;
     constructor(data) {
@@ -10,5 +11,6 @@ export class Usuario {
             ? data.propriedade
             : new Propriedade({});
         this.firebaseUser = data?.firebaseUser ? data.firebaseUser : null;
+        this.role = data?.role ? data.role : "anonimo";
     }
 }
