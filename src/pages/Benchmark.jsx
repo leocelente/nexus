@@ -18,15 +18,20 @@ export default class Benchmark extends Component {
             <div>
                 <PageBase
                     left={
-                        <>
-                            <SimpleRadar />
+                        <div>
+                            <h5>Por Atributos:</h5>
+                            <SimpleRadar level="atributo" />
+                            <hr />
+                            <h5>Por Grupo:</h5>
+                            <SimpleRadar level="grupo" />
+                            <br />
                             <Card>
                                 <span style={{ color: "#2e2e2e" }}>
                                     Dica: Cique nos items na legenda para
-                                    esconder a pratica no gráfico
+                                    esconder o cenário no gráfico
                                 </span>
                             </Card>
-                        </>
+                        </div>
                     }
                     right={
                         <>
