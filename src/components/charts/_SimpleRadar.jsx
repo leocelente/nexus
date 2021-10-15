@@ -11,6 +11,7 @@ import { Analise, Cenario } from "../../api/models/conjunto";
 import { Atributo, Grupo, Indicador } from "../../api/models/indicador";
 import { Pratica } from "../../api/models/pratica";
 import { Propriedade } from "../../api/models/propriedade";
+import PropTypes from "prop-types";
 
 const colors = [
     "rgba(255, 99, 132, 0.35)",
@@ -55,6 +56,10 @@ const options = {
 };
 
 class SimpleRadar extends Component {
+    static propTypes = {
+        level: PropTypes.string,
+    };
+
     constructor(props) {
         super(props);
         this.state = { year: new Date().getFullYear() - 1 };
@@ -151,7 +156,7 @@ class SimpleRadar extends Component {
                             })
                             .map((x) => x[1][0])
                             .map((x) => x.norm);
-                        avgs_ind[nome] = Math.max(...norms); //avgr(norms);
+                        avgs_ind[nome] = avgr(norms);
                     }
                 );
                 let i_nomes = atributo.indicadores.map((x) => x.nome);
@@ -159,6 +164,7 @@ class SimpleRadar extends Component {
                     .filter((ind) => i_nomes.includes(ind[0]))
                     .map((x) => x[1]);
                 avgs_att[atributo.nome] = Math.max(...a);
+                // avgs_att[atributo.nome] = avgr([...a]);
             });
             let a_nomes = grupo.atributos.map((x) => x.nome);
             let b = Object.entries(avgs_att)
@@ -168,8 +174,19 @@ class SimpleRadar extends Component {
         });
 
         /// build radar
-        let values = Object.values(avgs_att);
-        let labels = Object.keys(avgs_att);
+        let values;
+        let labels;
+        switch (this.props.level) {
+            case "grupo":
+                values = Object.values(avgs_grupo);
+                labels = Object.keys(avgs_grupo);
+                break;
+            default:
+            case "atributo":
+                values = Object.values(avgs_att);
+                labels = Object.keys(avgs_att);
+                break;
+        }
 
         return { labels, values };
     }
