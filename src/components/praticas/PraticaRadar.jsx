@@ -60,6 +60,9 @@ export default class PraticaRadar extends Component {
         let data = base;
         /** @type {Pratica} */
         let pratica = this.props.pratica;
+        if (!pratica.benchmark) {
+            pratica.benchmark = { agua: 0, alimento: 0, energia: 0 };
+        }
         const { agua, alimento, energia } = pratica.benchmark;
         data.datasets = [
             makeDataset(this.props.pratica.nome, [agua, alimento, energia], 0),

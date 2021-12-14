@@ -14,7 +14,11 @@ class UsedPraticas extends Component {
             /** @type {Array<Number>} */
             const tempos = this.props.selected?.praticas[i].tempos.sort();
             const txt = tempos.join(", ");
-            pratica.descricao["Utilização"] = txt;
+            if (pratica.descricao) {
+                pratica.descricao["Utilização"] = txt;
+            } else {
+                pratica.descricao = { Utilização: txt };
+            }
         }
         this.props.selectPratica(pratica);
     };

@@ -135,6 +135,7 @@ export async function fetchPropriedadesFirebase(dispatch) {
 
         await Helpers.asyncForEach(praticas, async (pratica, i) => {
             data.praticas[i] = pratica.data();
+            // console.log(pratica.data());
             data.praticas[i].pratica = await Helpers.followReference(
                 pratica.data().pratica
             );
@@ -164,9 +165,11 @@ async function getSerieHistoricaRaw() {
         const data = await Helpers.getCollection(indicador.ref, "data");
         await Helpers.asyncForEach(data, async (ponto, j) => {
             dados[i].data[j] = ponto.data();
+            // console.log(ponto.data());
             const propriedade = await Helpers.followReference(
                 ponto.data().propriedade
             );
+
             dados[i].data[j].propriedade = { nome: propriedade.nome };
         });
     });
@@ -205,7 +208,7 @@ function orderRawSerieHistorica(dados) {
                 tempo,
                 propriedade,
             });
-
+            // console.log(indicador, valor, tempo, propriedade);
             if (Object.entries(valor).length != 0) {
                 let kvs = Object.entries(valor);
                 kvs.forEach((kv) => {
