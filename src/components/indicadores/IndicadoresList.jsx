@@ -31,6 +31,7 @@ class IndicadoresList extends Component {
                     items={indicadores.map(this.showIndicador, indicadores)}
                     title="Indicadores"
                     onSaibaMais={null}
+                    startValue={0}
                     onSelect={(i) => this.handle(indicadores[i])}
                 />
             </div>
