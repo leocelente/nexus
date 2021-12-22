@@ -6,10 +6,15 @@ export default class List extends Component {
     static propTypes = {
         title: PropTypes.string,
         onSelect: PropTypes.func,
+        startValue: PropTypes.number,
     };
 
     constructor(props) {
         super(props);
+
+        let val = 0;
+        if (!props.startValue) val = 0;
+
         this.state = {
             field: [],
         };
