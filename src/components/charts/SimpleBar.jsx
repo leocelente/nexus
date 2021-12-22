@@ -131,7 +131,8 @@ class SimpleBar extends Component {
             if (this.props.transposed) return <></>;
             return emptySelection;
         }
-        if (this.props.graficos === undefined) return <></>;
+        if (this.props.graficos === undefined)
+            return <p style={{ color: "black" }}>Preparando os Dados...</p>;
 
         let data = base;
         const { graficos } = this.props;
