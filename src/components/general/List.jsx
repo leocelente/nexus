@@ -16,7 +16,7 @@ export default class List extends Component {
         if (!props.startValue) val = 0;
 
         this.state = {
-            field: [],
+            field: [0],
         };
     }
 
@@ -24,6 +24,19 @@ export default class List extends Component {
         this.setState({
             field,
         });
+    }
+
+    componentDidMount() {
+        this.setField([0]);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        // Detecta quando há uma mudança nos itens apresentados
+        // então reseta o item selecionado para o primeiro
+        // usado quando há mudança no atributo selecionado
+        if (this.props.items != prevProps.items) {
+            this.setField([0]);
+        }
     }
 
     render() {
