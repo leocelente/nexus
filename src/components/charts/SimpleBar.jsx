@@ -139,8 +139,12 @@ class SimpleBar extends Component {
 
         // parte da options inicial
         let option = options;
+
         // encontra nos dados vindos do banco (graficos),
         // o indicador com o nome do selecionado (selected.indicador)
+        if (!this.props.selected.indicador) {
+            return <></>;
+        }
         const { nome } = this.props.selected.indicador;
         const result = [...graficos.entries()].find((a) => a[0] === nome);
         if (result === undefined) return <></>;
