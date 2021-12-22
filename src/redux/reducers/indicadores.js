@@ -25,9 +25,13 @@ export default function (state = initialState, action) {
         }
         case SELECT_ATRIBUTO: {
             const { id } = action.payload;
+            const indicadores =
+                state.grupos[state.grupo]?.atributos[id]?.indicadores;
+
             return {
                 ...state,
                 atributo: id,
+                selectedIndicador: { indicador: indicadores[0] },
             };
         }
         case FETCH_INDICADORES:
