@@ -8,6 +8,7 @@ import TableJson from "../general/TableJson";
 import { selectPratica } from "../../redux/actions/praticasActions";
 import PraticaRadar from "./PraticaRadar";
 import { Pratica } from "../../api/models/pratica";
+import SingleList from "../general/SingleList";
 
 class PraticasList extends Component {
     constructor(props) {
@@ -66,11 +67,11 @@ class PraticasList extends Component {
                     </Modal.Footer>
                 </Modal>
 
-                <List
+                <SingleList
                     items={praticas.map((x) => x.nome)}
                     title="Praticas"
                     onSelect={(p) => this.handler(praticas[p])}
-                    onSaibaMais={(idx) => this.handleShow(praticas[idx])}
+                    // onSaibaMais={(idx) => this.handleShow(praticas[idx])}
                 />
             </div>
         );
