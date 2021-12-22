@@ -20,6 +20,7 @@ class GrupoAtributo extends Component {
     handleGrupo = (i) => {
         this.props.selectGrupo(i);
         this.props.selectAtributo(0);
+        this.handleAtributo(0);
     };
 
     handleAtributo = (i) => {
@@ -27,6 +28,14 @@ class GrupoAtributo extends Component {
     };
 
     render() {
+        const { grupos, grupo, atributo } = this.props;
+        if (
+            grupos == undefined ||
+            grupo == undefined ||
+            atributo == undefined
+        ) {
+            return <Row></Row>;
+        }
         return (
             <Row>
                 <Col>
