@@ -7,6 +7,7 @@ import List from "../general/List";
 import PraticaRadar from "../praticas/PraticaRadar";
 import { selectPratica } from "../../redux/actions/praticasActions";
 import TableJson from "../general/TableJson";
+import SingleList from "../general/SingleList";
 
 class UsedPraticas extends Component {
     handle = (pratica, i) => {
@@ -23,6 +24,12 @@ class UsedPraticas extends Component {
         this.props.selectPratica(pratica);
     };
 
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.selected != prevProps.selected) {
+            this.handle(this.props.selected.praticas[0].pratica, 0);
+        }
+    }
+
     render() {
         /** @type {Propriedade} */
         const propriedade = this.props.selected;
@@ -36,11 +43,12 @@ class UsedPraticas extends Component {
         const pratica = this.props.pratica;
         return (
             <>
-                <List
+                <SingleList
                     title="Praticas Aplicadas"
                     items={praticas.map((x) => x.pratica.nome)}
                     onSelect={(i) => this.handle(praticas[i].pratica, i)}
                 />
+                <h5>{this.props.pratica.nome}</h5>
                 <PraticaRadar pratica={this.props.pratica} />
                 <hr></hr>
                 <br></br>
