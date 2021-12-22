@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { selectIndicador } from "../../redux/actions/indicadoresActions";
 import List from "../general/List";
+import SingleList from "../general/SingleList";
 
 /**
  * Wrapper para mostrar os indicadores em uma lista, sem a opção
@@ -27,11 +28,11 @@ class IndicadoresList extends Component {
         }
         return (
             <div>
-                <List
+                <SingleList
                     items={indicadores.map(this.showIndicador, indicadores)}
                     title="Indicadores"
                     onSaibaMais={null}
-                    startValue={0}
+                    // startValue={0}
                     onSelect={(i) => this.handle(indicadores[i])}
                 />
             </div>

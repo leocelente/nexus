@@ -6,6 +6,7 @@ import {
     fetchPropriedades,
 } from "../../redux/actions/propriedadesActions";
 import List from "../general/List";
+import SingleList from "../general/SingleList";
 
 /**
  * Wrapper para mostrar os indicadores em uma lista, sem a opção
@@ -41,7 +42,7 @@ class PropriedadesList extends Component {
         }
         return (
             <div>
-                <List
+                <SingleList
                     items={propriedades.map(this.showPropriedade, propriedades)}
                     title="Propriedades"
                     onSaibaMais={null}
