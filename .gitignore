@@ -21,3 +21,9 @@ yarn-debug.log*
 yarn-error.log*
 .eslintcache
 .env
+
+.firebase*
+firebase*
+firestore*
+
+wiki.md
