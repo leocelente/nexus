@@ -21,3 +21,17 @@ então com o pacote `firebase-tools` é possivel fazer um deploy:
  $ npm run build
  $ firebase deploy --public build
 ```
+
+### Dependencias Externas:
+ - `chart.js`
+ - `google-maps-react`
+ - `bootstrap-react`
+ - `firebase`
+ - `redux`
+ - `redux-thunk`
+
+## Screenshots
+![pagina inicial](./assets/pag_inicial.png)
+![pagina indicadores](./assets/indicadores.png)
+![pagina praticas](./assets/praticas.png)
+![pagina benchmark](./assets/benchmark.png)
