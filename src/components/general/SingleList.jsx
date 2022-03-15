@@ -12,10 +12,15 @@ export default class SingleList extends Component {
         prop: PropTypes,
     };
     componentDidUpdate(prevProps, prevState) {
+        const isSame = (a, b) => {
+            if (a.length !== b.length) return false;
+            return a.every((v, i) => v === b[i]);
+        };
+
         // Detecta quando há uma mudança nos itens apresentados
         // então reseta o item selecionado para o primeiro
         // usado quando há mudança no atributo selecionado
-        if (this.props.items != prevProps.items) {
+        if (!isSame(this.props.items, prevProps.items)) {
             this.setKey(0);
         }
     }

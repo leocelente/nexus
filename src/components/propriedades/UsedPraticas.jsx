@@ -26,7 +26,8 @@ class UsedPraticas extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (this.props.selected != prevProps.selected) {
-            this.handle(this.props.selected.praticas[0].pratica, 0);
+            //     this.handle(this.props.selected.praticas[0].pratica, 0);
+            console.log("Selected different propriedade");
         }
     }
 
@@ -45,6 +46,7 @@ class UsedPraticas extends Component {
             <>
                 <SingleList
                     title="Praticas Aplicadas"
+                    onSaibaMais={null}
                     items={praticas.map((x) => x.pratica.nome)}
                     onSelect={(i) => this.handle(praticas[i].pratica, i)}
                 />

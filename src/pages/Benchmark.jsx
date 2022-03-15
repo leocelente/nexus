@@ -7,6 +7,7 @@ import SimpleRadar from "../components/charts/_SimpleRadar";
 import PropertyBar from "../components/benchmark/PropertyBar";
 import AllPraticasList from "../components/benchmark/AllPraticasList";
 import CenarioManager from "../components/benchmark/CenarioManager";
+import BenchView from "../components/benchmark/BenchView";
 /**
  * Página de benchmark está menos definida, em teoria mostraria o
  * grafico de como praticas se relacionam com indicadores [normalizados]. Mas
@@ -19,12 +20,7 @@ export default class Benchmark extends Component {
                 <PageBase
                     left={
                         <div>
-                            <h5>Por Atributos:</h5>
-                            <SimpleRadar level="atributo" />
-                            <hr />
-                            <h5>Por Grupo:</h5>
-                            <SimpleRadar level="grupo" />
-                            <br />
+                            <BenchView />
                             <Card>
                                 <span style={{ color: "#2e2e2e" }}>
                                     Dica: Cique nos items na legenda para
@@ -45,10 +41,6 @@ export default class Benchmark extends Component {
                                 </Card.Text>
                             </Card>
                             <br></br>
-                            {/* <SelectTema /> */}
-                            <br></br>
-                            {/* <AllPraticasList /> */}
-                            {/*<IndicadoresList /> */}
                             <CenarioManager />
                         </>
                     }

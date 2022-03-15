@@ -11,12 +11,14 @@ import PropTypes from "prop-types";
 import { Bar, Line } from "react-chartjs-2";
 import { connect } from "react-redux";
 import { fetchPropriedades } from "../../redux/actions/propriedadesActions";
-import { fetchSerieHist } from "../../redux/actions/indicadoresActions";
+import {
+    fetchSerieHist,
+    selectIndicador,
+} from "../../redux/actions/indicadoresActions";
+
 import pattern from "patternomaly"; // Biblioteca para gerar padrões (quadradinhos)
 // no grafico para criar um destaque
-import { Col, Row, Dropdown, ButtonGroup } from "react-bootstrap";
-import Graph from "../general/Graph";
-import { Helpers } from "../../api/firebase/utils";
+import { Spinner } from "react-bootstrap";
 
 /* Padroniza as cores vistas. Ainda não funciona corretamente
     devido as multiplas renderizações do react.
@@ -40,8 +42,9 @@ const colors = [
  * @returns Created ChartJS dataset with `label` as title
  * and `data` as values
  */
-function makeDataset(label, data, index) {
-    if (label.startsWith("Sítio São João")) {
+function makeDataset(label, data, index, prop) {
+    console.log(prop);
+    if (label.startsWith(prop)) {
         return {
             label,
             data,
@@ -78,7 +81,6 @@ const emptySelection = (
         </p>
     </>
 );
-
 class SimpleBar extends Component {
     static propTypes = {
         transposed: PropTypes.bool,
@@ -87,10 +89,27 @@ class SimpleBar extends Component {
         transposed: false,
     };
     componentDidMount() {
-        if (!this.props.transposed) this.props.fetchSerieHist();
+        if (!this.props.transposed) {
+            this.props.fetchSerieHist();
+        }
+
+        // debugger;
+        console.log(this.props.graficos);
+        if (this.props.graficos !== null) {
+            console.log("Could display data!");
+            // debugger;
+            console.log(this.props.selected?.indicador);
+            if (!this.props.selected?.indicador) {
+                const top_indicador = this.props.grupos[0].atributos[0];
+                this.props.selectIndicador(top_indicador);
+            }
+        }
     }
 
     render() {
+        if (this.props.wait) {
+            return <span color={"black"}>Requisitando Dados...</span>;
+        }
         const options = {
             scales: {
                 yAxes: [
@@ -131,9 +150,15 @@ class SimpleBar extends Component {
             if (this.props.transposed) return <></>;
             return emptySelection;
         }
-        if (this.props.graficos === undefined)
-            return <p style={{ color: "black" }}>Preparando os Dados...</p>;
 
+        if (this.props.graficos === undefined) {
+            // return Preparando os Dados...;
+            return (
+                <p color="black" align="center">
+                    <Spinner animation="border" variant="secondary" />
+                </p>
+            );
+        }
         let data = base;
         const { graficos } = this.props;
 
@@ -213,12 +238,14 @@ class SimpleBar extends Component {
                 matrix[0].map((_, i) => matrix.map((x) => x[i]));
             values = transpose(values);
             const anos = [...years];
-            dsts = anos.map((n, i) => makeDataset(String(n), values[i], i));
+            dsts = anos.map((n, i) =>
+                makeDataset(String(n), values[i], i, this.props.atual)
+            );
             data.labels = [...lista_propriedades];
             data.datasets = dsts;
         } else if (this.props.transposed === false) {
             dsts = lista_propriedades.map((n, i) =>
-                makeDataset(n, values[i], i)
+                makeDataset(n, values[i], i, this.props.atual)
             );
 
             data.labels = [...years];
@@ -232,8 +259,13 @@ class SimpleBar extends Component {
 const mapStateToProps = (state) => ({
     graficos: state.indicadores.graficos,
     selected: state.indicadores.selectedIndicador,
+    grupos: state.indicadores.grupos,
+    wait: state.admin.wait,
+    atual: state.authentication.temporary_propriedade,
 });
 
-export default connect(mapStateToProps, { fetchPropriedades, fetchSerieHist })(
-    SimpleBar
-);
+export default connect(mapStateToProps, {
+    fetchPropriedades,
+    fetchSerieHist,
+    selectIndicador,
+})(SimpleBar);

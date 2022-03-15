@@ -12,6 +12,7 @@ import { Atributo, Grupo, Indicador } from "../../api/models/indicador";
 import { Pratica } from "../../api/models/pratica";
 import { Propriedade } from "../../api/models/propriedade";
 import PropTypes from "prop-types";
+import { setResultados } from "../../redux/actions/praticasActions";
 
 const colors = [
     "rgba(255, 99, 132, 0.35)",
@@ -217,6 +218,7 @@ class SimpleRadar extends Component {
                 cenario_data.get(cenario.nome),
                 propriedades_all
             );
+
             if (points?.labels !== undefined) {
                 datasets.push(
                     makeDataset(cenario.nome, points.values, cenario.index)
@@ -228,6 +230,8 @@ class SimpleRadar extends Component {
             labels,
             datasets,
         };
+
+        this.props.setResultados({ ...data }, this.props.level);
 
         return <Radar data={data} options={options} />;
     }
@@ -241,4 +245,4 @@ const mapStateToProps = (state) => ({
     propriedades: state.propriedades.propriedades,
 });
 
-export default connect(mapStateToProps, null)(SimpleRadar);
+export default connect(mapStateToProps, { setResultados })(SimpleRadar);

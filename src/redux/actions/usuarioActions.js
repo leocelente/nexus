@@ -1,3 +1,4 @@
+import { SELECT_PROPRIEDADE_ATUAL } from ".";
 import {
     firebaseLogin,
     firebaseLogout,
@@ -14,4 +15,11 @@ export const action_logout = () => async (dispatch) => {
 
 export const is_logged = () => async (dispatch) => {
     isLogged(dispatch);
+};
+
+export const selectPropriedadeAtual = (atual) => (dispatch) => {
+    dispatch({
+        type: SELECT_PROPRIEDADE_ATUAL,
+        payload: atual,
+    });
 };

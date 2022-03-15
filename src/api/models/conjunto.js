@@ -22,6 +22,7 @@ export class Analise {
     count = 0;
     /** @type {Array<Cenario>} */
     cenarios = [];
+    resultados = new Map();
     add(/**@type {Cenario}*/ cenario) {
         cenario.index = this.count;
         this.count++;
@@ -35,6 +36,7 @@ export class Analise {
         const me = new Analise();
         me.count = other.count;
         me.cenarios = Array.from(other.cenarios);
+        me.resultados = new Map(other.resultados);
         return me;
     }
 

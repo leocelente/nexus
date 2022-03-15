@@ -5,6 +5,7 @@ import {
     EDIT_CONJUNTO,
     ADD_CONJUNTO,
     REM_CONJUNTO,
+    SET_RESULTADOS,
 } from "./index.js";
 
 export const selectTema = (id) => ({
@@ -29,4 +30,9 @@ export const fetchPraticas = () => async (dispatch) => {
 export const addConjunto = () => ({
     type: ADD_CONJUNTO,
     payload: {},
+});
+
+export const setResultados = (resultados, level) => ({
+    type: SET_RESULTADOS,
+    payload: { resultados, level },
 });

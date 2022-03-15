@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import PropriedadeAtual from "../propriedades/PropriedadeAtual";
 
 export default class Header extends Component {
     render() {
@@ -30,6 +31,7 @@ export default class Header extends Component {
                         </Link>
                     </Nav>
                     <Nav>
+                        <PropriedadeAtual />
                         <Nav.Link>
                             <Link style={{ color: "white" }} to="/admin">
                                 Admin

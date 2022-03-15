@@ -5,6 +5,7 @@ import {
     FETCH_PRATICAS,
     FETCH_PROPRIEDADES,
     FETCH_SERIE_HIST,
+    WAIT,
 } from "../../redux/actions";
 
 import { Grupo, Atributo, Indicador } from "../models/indicador";
@@ -56,7 +57,10 @@ export async function fetchIndicadoresFirebase(dispatch) {
             });
         });
     });
-
+    dispatch({
+        type: WAIT,
+        payload: false,
+    });
     dispatch({
         type: FETCH_INDICADORES,
         payload: { grupos },

@@ -8,6 +8,7 @@ import {
     EDIT_CONJUNTO,
     REM_CONJUNTO,
     ADD_CONJUNTO,
+    SET_RESULTADOS,
 } from "../actions";
 
 const initialState = {
@@ -51,12 +52,23 @@ export default function (state = initialState, action) {
                 analise,
             };
         }
+
         case REM_CONJUNTO: {
             const cenario = action.payload.cenario;
             const { index } = cenario;
             const analise = Array.from(state.analise);
             delete analise.cenarios[index];
             return { ...state, analise };
+        }
+
+        case SET_RESULTADOS: {
+            const { resultados, level } = action.payload;
+            // const analise = Analise.from(state.analise);
+            // // analise.resultados = "ABC";
+            // analise.resultados.set(level, resultados); // sync all resultados at once
+            const new_state = { ...state };
+            new_state.analise.resultados.set(level, resultados);
+            return new_state;
         }
 
         default:
